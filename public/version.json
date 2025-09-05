@@ -1,0 +1,8 @@
+{
+  "version": "v2.0.FINAL.24072025",
+  "buildTime": "2025-07-24T09:57:00.000Z",
+  "commit": "deployment-debug-test",
+  "environment": "production",
+  "adminPanelVersion": "Panel de Administración v2.0 - DEPLOYMENT TEST",
+  "debugMarker": "ADMIN_PANEL_UPDATE_24072025_FINAL"
+}

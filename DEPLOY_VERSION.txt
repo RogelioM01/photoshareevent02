@@ -1,0 +1,11 @@
+DEPLOYMENT VERSION: v3.1.ZOOM_FIX.2025-09-05
+BUILD TIME: 2025-09-05T22:45:00.000Z
+FEATURES INCLUDED:
+- ✅ react-zoom-pan-pinch integration (FIXED API)
+- ✅ Pinch-to-zoom mobile gestures  
+- ✅ Modal click-outside-to-close
+- ✅ Simplified upload interface
+- ✅ FAB with animations
+- ✅ All modern functionality
+
+CRITICAL FIX: Updated pan -> panning property for react-zoom-pan-pinch v3.x compatibility
