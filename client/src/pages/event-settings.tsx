@@ -362,9 +362,22 @@ export default function EventSettings() {
               className="h-8 w-8 cursor-pointer hover:scale-110 transition-transform duration-200" 
               onClick={() => setIsQRModalOpen(true)}
             />
-            <div>
-              <h1 className="text-2xl font-bold">Mi evento</h1>
-              <p className="text-gray-300">{personalEvent.title}</p>
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold">Mi evento</h1>
+                  <p className="text-gray-300">{personalEvent.title}</p>
+                </div>
+                <a 
+                  href={`/evento/${currentUser?.username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-gray-300 transition-colors duration-200"
+                  title="Ver evento público"
+                >
+                  <ExternalLink className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
