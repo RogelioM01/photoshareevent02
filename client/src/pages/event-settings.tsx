@@ -28,7 +28,8 @@ import {
   Globe,
   Link as LinkIcon,
   Copy,
-  ExternalLink
+  ExternalLink,
+  Download
 } from "lucide-react";
 import BackgroundSelector from "@/components/background-selector";
 import { usePersonalEvent, type PersonalEventFormData } from "@/hooks/usePersonalEvent";
@@ -96,8 +97,10 @@ export default function EventSettings() {
     isLoading,
     updateEvent,
     uploadCover,
+    downloadZip,
     isUpdating,
     isUploadingCover,
+    isDownloadingZip,
     coverUploadResult
   } = usePersonalEvent(currentUser?.username);
 
@@ -680,6 +683,45 @@ export default function EventSettings() {
                 />
               </div>
 
+              {/* Download Gallery Section */}
+              <div className="border border-blue-200 rounded-lg p-6 bg-blue-50/50">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center mb-2">
+                      <Download className="w-6 h-6 text-blue-600 mr-3" />
+                      <Label className="text-lg font-semibold text-blue-900">
+                        Descargar Galería Completa
+                      </Label>
+                    </div>
+                    <p className="text-sm text-blue-700 leading-relaxed">
+                      Descarga todas las fotos y publicaciones de texto de tu evento en un archivo ZIP. 
+                      Incluye imágenes en alta calidad y un documento con todos los mensajes de texto compartidos.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex justify-center pt-4 border-t border-blue-200">
+                  <Button 
+                    onClick={downloadZip}
+                    disabled={isDownloadingZip}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                    size="lg"
+                    data-testid="button-download-gallery-zip"
+                  >
+                    {isDownloadingZip ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-3 animate-spin" />
+                        Preparando descarga...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-5 h-5 mr-3" />
+                        Descargar Galería (ZIP)
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
 
               
               <div className="flex justify-end">
