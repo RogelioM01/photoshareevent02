@@ -22,6 +22,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Technical Implementations
 - **Frontend**: React 18 with TypeScript, Wouter for routing, React Query for server state, shadcn/ui with Radix UI, Tailwind CSS for styling, and Vite for building.
+- **Production CSS Compatibility**: Enhanced CSS compilation with force-include classes and inline style fallbacks to ensure UI consistency between development and production environments.
 - **Backend**: Node.js with Express.js, TypeScript with ES modules, PostgreSQL with Drizzle ORM, Multer for file handling.
 - **Authentication**: Custom PostgreSQL schema for user authentication with role-based redirection and username/password support, enhanced AuthContext synchronization using localStorage.
 - **Personal Event Pages**: Each user has a personal event page (`/evento/[username]`) with editable details and automatic creation upon access.

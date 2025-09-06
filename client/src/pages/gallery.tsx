@@ -490,10 +490,25 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* Floating Action Button */}
+        {/* Floating Action Button - Force render with inline styles for production */}
         <button
           onClick={() => setShowUploadModal(true)}
           className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group fab-pulse hover:animate-none focus:animate-none active:scale-95 z-50"
+          style={{
+            // Force styles for production compatibility
+            position: 'fixed',
+            bottom: '2rem',
+            right: '2rem',
+            width: '3.5rem',
+            height: '3.5rem',
+            background: 'linear-gradient(to right, rgb(59 130 246), rgb(37 99 235))',
+            borderRadius: '9999px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+            animation: 'fab-pulse-animation 4s infinite'
+          }}
           data-testid="fab-upload-button"
           aria-label="Subir fotos y videos"
         >

@@ -75,7 +75,7 @@
     background: linear-gradient(135deg, hsl(220, 14%, 96%) 0%, hsl(220, 13%, 91%) 100%);
   }
 
-  /* Custom FAB pulse animation with pauses */
+  /* Custom FAB pulse animation with pauses - Force include in build */
   .fab-pulse {
     animation: fab-pulse-animation 4s infinite;
   }
@@ -95,6 +95,11 @@
       transform: scale(1);
       opacity: 1;
     }
+  }
+  
+  /* Force Tailwind to include these utility classes in production build */
+  .force-include-classes {
+    @apply fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group hover:animate-none focus:animate-none active:scale-95 z-50;
   }
   
   .event-primary {
