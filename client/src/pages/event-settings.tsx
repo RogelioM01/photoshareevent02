@@ -31,12 +31,14 @@ import {
   ExternalLink,
   Download,
   Image,
-  Edit
+  Edit,
+  QrCode
 } from "lucide-react";
 import BackgroundSelector from "@/components/background-selector";
 import { usePersonalEvent, type PersonalEventFormData } from "@/hooks/usePersonalEvent";
 import { AttendeeStats } from "@/components/attendee-stats";
 import { QRScanner } from "@/components/qr-scanner";
+import QRModal from "@/components/qr-modal";
 import EventNotificationsSettings from "@/components/event-notifications-settings";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -706,6 +708,36 @@ export default function EventSettings() {
                     <Edit className="w-5 h-5 mr-3" />
                     Administrar Fotos
                   </Button>
+                </div>
+              </div>
+
+              {/* QR Code Section */}
+              <div className="border border-purple-200 rounded-lg p-6 bg-purple-50/50">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center mb-2">
+                      <QrCode className="w-6 h-6 text-purple-600 mr-3" />
+                      <Label className="text-lg font-semibold text-purple-900">
+                        QR de mi Evento
+                      </Label>
+                    </div>
+                    <p className="text-sm text-purple-700 leading-relaxed">
+                      Genera y comparte el código QR de tu evento para que los invitados puedan acceder fácilmente. 
+                      Incluye opciones para descargar el código QR y compartir el enlace.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex justify-center pt-4 border-t border-purple-200">
+                  <div className="w-full max-w-sm">
+                    <QRModal 
+                      eventUrl={`${window.location.origin}/evento/${currentUser?.username}`}
+                      eventTitle={personalEvent?.title || "Mi Evento"}
+                      buttonVariant="default"
+                      buttonText="Generar QR de mi Evento"
+                      buttonIcon={true}
+                    />
+                  </div>
                 </div>
               </div>
 
