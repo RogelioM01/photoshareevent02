@@ -349,11 +349,11 @@ export default function EventSettings() {
       <div className="mb-6">
         <Button 
           variant="ghost" 
-          onClick={() => setLocation("/dashboard")}
+          onClick={() => setLocation(`/evento/${currentUser?.username}`)}
           className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver al Panel
+          Ver Mi Evento
         </Button>
         
         <div 

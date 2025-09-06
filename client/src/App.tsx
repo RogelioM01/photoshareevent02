@@ -30,13 +30,13 @@ function Router() {
       <Route path="/features" component={Features} />
       <Route path="/demo" component={Demo} />
       <Route path="/login" component={Login} />
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/dashboard" component={EventSettings} />
       <Route path="/admin" component={AdminPanel} />
       <Route path="/admin/email-config" component={AdminEmailConfig} />
       <Route path="/admin/links" component={AdminLinks} />
       <Route path="/email-test" component={EmailTest} />
       <Route path="/debug" component={DebugPage} />
-      <Route path="/evento/:username/configuracion" component={EventSettings} />
+      <Route path="/evento/:username/configuracion" component={Dashboard} />
       <Route path="/evento/:username/registro" component={RegistroAsistencia} />
       <Route path="/evento/:username/checkin" component={AdminCheckin} />
       {/* 
