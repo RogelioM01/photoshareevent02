@@ -458,14 +458,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Store user name in event_users table for future reference if not exists
       try {
-        await storage.createEventUser({
-          id: userId,
-          eventId,
-          name: userName,
-        });
+        // Check if user already exists first
+        const existingUser = await storage.getEventUser(userId);
+        
+        if (!existingUser) {
+          // Use direct database insert instead of createEventUser to preserve the userId
+          console.log("Creating event_user record:", { userId, userName, eventId });
+          await storage.createEventUserWithId({
+            id: userId,
+            eventId,
+            name: userName,
+          });
+          console.log("✅ Event user created successfully");
+        } else {
+          console.log("User already exists in event_users:", userId);
+        }
       } catch (error) {
-        // User might already exist, ignore error
-        console.log("User already exists in event_users:", userId);
+        console.log("⚠️ Failed to create event_user:", error);
       }
       
       res.json(post);

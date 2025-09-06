@@ -92,6 +92,7 @@ export interface IStorage {
   getEventUser(id: string): Promise<EventUser | undefined>;
   getEventUserByNameAndEvent(name: string, eventId: string): Promise<EventUser | undefined>;
   createEventUser(user: InsertEventUser): Promise<EventUser>;
+  createEventUserWithId(user: InsertEventUser): Promise<EventUser>;
   
   // Photos
   getPhotosByEvent(eventId: string): Promise<PhotoWithUser[]>;
@@ -435,6 +436,14 @@ export class DatabaseStorage implements IStorage {
       const userWithId = { ...user, id: userId };
       
       const result = await db.insert(eventUsers).values(userWithId).returning();
+      return result[0];
+    });
+  }
+
+  async createEventUserWithId(user: InsertEventUser): Promise<EventUser> {
+    return await executeDbOperation(async (db) => {
+      // Use the provided ID directly without modification
+      const result = await db.insert(eventUsers).values(user).returning();
       return result[0];
     });
   }
