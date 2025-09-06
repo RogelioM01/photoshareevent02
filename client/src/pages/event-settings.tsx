@@ -356,11 +356,19 @@ export default function EventSettings() {
           Volver al Panel
         </Button>
         
-        <div className="bg-gradient-to-r from-gray-900 to-gray-700 rounded-lg p-6 text-white">
+        <div 
+          className="bg-gradient-to-r from-gray-900 to-gray-700 rounded-lg p-6 text-white cursor-pointer hover:from-gray-800 hover:to-gray-600 transition-all duration-200"
+          onClick={() => window.open(`/evento/${currentUser?.username}`, '_blank')}
+          title="Ver evento público"
+        >
           <div className="flex items-center space-x-4">
             <QrCode 
-              className="h-8 w-8 cursor-pointer hover:scale-110 transition-transform duration-200" 
-              onClick={() => setIsQRModalOpen(true)}
+              className="h-8 w-8 cursor-pointer hover:scale-110 transition-transform duration-200 relative z-10" 
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsQRModalOpen(true);
+              }}
+              title="Generar código QR"
             />
             <div className="flex-1">
               <div className="flex items-center justify-between">
@@ -368,15 +376,7 @@ export default function EventSettings() {
                   <h1 className="text-2xl font-bold">Mi evento</h1>
                   <p className="text-gray-300">{personalEvent.title}</p>
                 </div>
-                <a 
-                  href={`/evento/${currentUser?.username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white hover:text-gray-300 transition-colors duration-200"
-                  title="Ver evento público"
-                >
-                  <ExternalLink className="w-5 h-5" />
-                </a>
+                <ExternalLink className="w-5 h-5 opacity-70" />
               </div>
             </div>
           </div>
