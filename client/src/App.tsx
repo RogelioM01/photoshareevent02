@@ -12,7 +12,6 @@ import Demo from "@/pages/demo";
 import Gallery from "@/pages/gallery";
 import Login from "@/pages/login";
 import AdminPanel from "@/pages/admin";
-import Dashboard from "@/pages/dashboard";
 import EventSettings from "@/pages/event-settings";
 import EventoPersonal from "@/pages/evento-personal";
 import RegistroAsistencia from "@/pages/registro-asistencia";
@@ -36,7 +35,6 @@ function Router() {
       <Route path="/admin/links" component={AdminLinks} />
       <Route path="/email-test" component={EmailTest} />
       <Route path="/debug" component={DebugPage} />
-      <Route path="/evento/:username/configuracion" component={Dashboard} />
       <Route path="/evento/:username/registro" component={RegistroAsistencia} />
       <Route path="/evento/:username/checkin" component={AdminCheckin} />
       {/* 

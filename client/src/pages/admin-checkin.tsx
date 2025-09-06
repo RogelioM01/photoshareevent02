@@ -75,7 +75,7 @@ export default function AdminCheckinPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setLocation(`/evento/${username}/configuracion`)}
+                onClick={() => setLocation("/dashboard")}
                 className="flex items-center gap-1 px-2 sm:px-3"
               >
                 <ArrowLeft className="h-4 w-4" />
