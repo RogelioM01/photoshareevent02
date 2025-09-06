@@ -367,7 +367,7 @@ export default function EventSettings() {
                   <h1 className="text-2xl font-bold">Mi evento</h1>
                   {/* Cache verification indicator */}
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                    v3.1.FORCE.240925 - Actualizado
+                    v3.2.REPLIT.240925 - Deploy Fix
                   </span>
                   <p className="text-gray-300">{personalEvent.title}</p>
                 </div>
