@@ -358,7 +358,7 @@ export default function EventSettings() {
           <div className="flex items-center space-x-4">
             <Settings className="h-8 w-8" />
             <div>
-              <h1 className="text-2xl font-bold">Configuración del Evento</h1>
+              <h1 className="text-2xl font-bold">Mi evento</h1>
               <p className="text-gray-300">{personalEvent.title}</p>
             </div>
           </div>
