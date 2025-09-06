@@ -355,11 +355,22 @@ export default function EventSettings() {
         </Button>
         
         <div className="bg-gradient-to-r from-gray-900 to-gray-700 rounded-lg p-6 text-white">
-          <div className="flex items-center space-x-4">
-            <Settings className="h-8 w-8" />
-            <div>
-              <h1 className="text-2xl font-bold">Mi evento</h1>
-              <p className="text-gray-300">{personalEvent.title}</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <QrCode className="h-8 w-8" />
+              <div>
+                <h1 className="text-2xl font-bold">Mi evento</h1>
+                <p className="text-gray-300">{personalEvent.title}</p>
+              </div>
+            </div>
+            <div className="ml-4">
+              <QRModal 
+                eventUrl={`${window.location.origin}/evento/${currentUser?.username}`}
+                eventTitle={personalEvent?.title || "Mi Evento"}
+                buttonVariant="outline"
+                buttonText="Generar QR"
+                buttonIcon={true}
+              />
             </div>
           </div>
         </div>
