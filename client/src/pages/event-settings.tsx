@@ -67,6 +67,7 @@ export default function EventSettings() {
   const [activeTab, setActiveTab] = useState("basico");
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [showQRScanner, setShowQRScanner] = useState(false);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -358,13 +359,7 @@ export default function EventSettings() {
           <div className="flex items-center space-x-4">
             <QrCode 
               className="h-8 w-8 cursor-pointer hover:scale-110 transition-transform duration-200" 
-              onClick={() => {
-                // Buscar el botón QR en la pestaña de herramientas y hacer click en él
-                const qrButton = document.querySelector('[data-testid="qr-modal-trigger"]') as HTMLButtonElement;
-                if (qrButton) {
-                  qrButton.click();
-                }
-              }}
+              onClick={() => setIsQRModalOpen(true)}
             />
             <div>
               <h1 className="text-2xl font-bold">Mi evento</h1>
@@ -1031,6 +1026,148 @@ export default function EventSettings() {
                 eventId={personalEvent.id}
                 eventTitle={personalEvent.title}
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* QR Modal controlado desde el header */}
+      {isQRModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="qr-modal-title"
+          aria-describedby="qr-modal-description"
+        >
+          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 relative">
+            {/* Close button */}
+            <button
+              onClick={() => setIsQRModalOpen(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 z-10"
+              aria-label="Cerrar modal del código QR"
+              aria-describedby="qr-modal-title"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Modal content */}
+            <div className="p-6">
+              <h2 id="qr-modal-title" className="text-lg font-semibold text-center mb-4">Código QR de tu evento</h2>
+              <p id="qr-modal-description" className="text-sm text-gray-600 text-center mb-4">
+                Escanea este código QR para acceder al evento
+              </p>
+              
+              <div className="flex flex-col items-center space-y-4">
+                {/* QR Code */}
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/evento/${currentUser?.username}`)}`}
+                    alt="Código QR del evento" 
+                    className="w-48 h-48 object-contain mx-auto"
+                  />
+                </div>
+                
+                {/* Event Info */}
+                <div className="text-center space-y-2">
+                  <h3 className="font-semibold text-base">{personalEvent?.title || "Mi Evento"}</h3>
+                  <p className="text-xs text-gray-600 break-all leading-tight px-2">{`${window.location.origin}/evento/${currentUser?.username}`}</p>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex flex-col gap-2 w-full">
+                  <Button 
+                    variant="outline" 
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(`${window.location.origin}/evento/${currentUser?.username}`);
+                        toast({
+                          title: "¡Copiado!",
+                          description: "El enlace de tu evento ha sido copiado al portapapeles",
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Error",
+                          description: "No se pudo copiar el enlace",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                    className="text-sm h-9"
+                    size="sm"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copiar enlace
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/evento/${currentUser?.username}`)}`;
+                      link.download = `qr-${(personalEvent?.title || "Mi Evento").replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}.png`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                    className="text-sm h-9"
+                    size="sm"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar QR
+                  </Button>
+                  <Button 
+                    variant="default" 
+                    onClick={async () => {
+                      const eventUrl = `${window.location.origin}/evento/${currentUser?.username}`;
+                      if (navigator.share) {
+                        try {
+                          await navigator.share({
+                            title: `Evento: ${personalEvent?.title || "Mi Evento"}`,
+                            text: `¡Únete a mi evento! ${personalEvent?.title || "Mi Evento"}`,
+                            url: eventUrl,
+                          });
+                        } catch (error) {
+                          console.log("Error sharing:", error);
+                          try {
+                            await navigator.clipboard.writeText(eventUrl);
+                            toast({
+                              title: "¡Copiado!",
+                              description: "El enlace de tu evento ha sido copiado al portapapeles",
+                            });
+                          } catch (error) {
+                            toast({
+                              title: "Error",
+                              description: "No se pudo copiar el enlace",
+                              variant: "destructive",
+                            });
+                          }
+                        }
+                      } else {
+                        try {
+                          await navigator.clipboard.writeText(eventUrl);
+                          toast({
+                            title: "¡Copiado!",
+                            description: "El enlace de tu evento ha sido copiado al portapapeles",
+                          });
+                        } catch (error) {
+                          toast({
+                            title: "Error",
+                            description: "No se pudo copiar el enlace",
+                            variant: "destructive",
+                          });
+                        }
+                      }
+                    }}
+                    className="text-sm h-9"
+                    size="sm"
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Compartir
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
