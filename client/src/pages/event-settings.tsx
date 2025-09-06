@@ -29,7 +29,9 @@ import {
   Link as LinkIcon,
   Copy,
   ExternalLink,
-  Download
+  Download,
+  Image,
+  Edit
 } from "lucide-react";
 import BackgroundSelector from "@/components/background-selector";
 import { usePersonalEvent, type PersonalEventFormData } from "@/hooks/usePersonalEvent";
@@ -147,6 +149,12 @@ export default function EventSettings() {
   const openRegistrationPage = () => {
     if (!currentUser?.username) return;
     const url = `/evento/${currentUser.username}/registro`;
+    setLocation(url);
+  };
+
+  const openPhotoManagement = () => {
+    if (!currentUser?.username) return;
+    const url = `/evento/${currentUser.username}-album`;
     setLocation(url);
   };
 
@@ -667,6 +675,36 @@ export default function EventSettings() {
                         Descargar Galería (ZIP)
                       </>
                     )}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Photo Management Section */}
+              <div className="border border-orange-200 rounded-lg p-6 bg-orange-50/50">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center mb-2">
+                      <Image className="w-6 h-6 text-orange-600 mr-3" />
+                      <Label className="text-lg font-semibold text-orange-900">
+                        Administrar Fotos y Videos
+                      </Label>
+                    </div>
+                    <p className="text-sm text-orange-700 leading-relaxed">
+                      Accede a la galería completa de tu evento para administrar, editar y eliminar fotos y videos. 
+                      Tienes control total sobre el contenido compartido en tu evento.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex justify-center pt-4 border-t border-orange-200">
+                  <Button 
+                    onClick={openPhotoManagement}
+                    className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                    size="lg"
+                    data-testid="button-manage-photos"
+                  >
+                    <Edit className="w-5 h-5 mr-3" />
+                    Administrar Fotos
                   </Button>
                 </div>
               </div>
