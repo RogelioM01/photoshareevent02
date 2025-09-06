@@ -345,17 +345,8 @@ export default function EventSettings() {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-      {/* Header with breadcrumb */}
+      {/* Header */}
       <div className="mb-6">
-        <Button 
-          variant="ghost" 
-          onClick={() => setLocation(`/evento/${currentUser?.username}`)}
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Ver Mi Evento
-        </Button>
-        
         <div 
           className="bg-gradient-to-r from-gray-900 to-gray-700 rounded-lg p-6 text-white cursor-pointer hover:from-gray-800 hover:to-gray-600 transition-all duration-200"
           onClick={() => window.open(`/evento/${currentUser?.username}`, '_blank')}
