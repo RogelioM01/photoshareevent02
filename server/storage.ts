@@ -443,7 +443,7 @@ export class DatabaseStorage implements IStorage {
   async createEventUserWithId(user: InsertEventUser): Promise<EventUser> {
     return await executeDbOperation(async (db) => {
       // Use the provided ID directly without modification
-      const result = await db.insert(eventUsers).values(user).returning();
+      const result = await db.insert(eventUsers).values([user]).returning();
       return result[0];
     });
   }
@@ -476,7 +476,7 @@ export class DatabaseStorage implements IStorage {
       
       const formattedResult = result.map(photo => ({
         ...photo,
-        userName: photo.userName || this.extractUserNameFromId(photo.userId)
+        userName: photo.userName || this.extractUserNameFromId(photo.userId || '')
       }));
       
       console.log(`Found ${formattedResult.length} basic photos from ${isDatabaseCoolify ? 'COOLIFY' : 'LOCAL'} database`);
@@ -565,7 +565,7 @@ export class DatabaseStorage implements IStorage {
       // SAME AS PHOTOS: Apply extractUserNameFromId fallback for guest users
       const formattedResult = result.map(post => ({
         ...post,
-        userName: post.userName || this.extractUserNameFromId(post.userId)
+        userName: post.userName || this.extractUserNameFromId(post.userId || '')
       }));
       
       return formattedResult;
