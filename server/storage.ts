@@ -520,34 +520,55 @@ export class DatabaseStorage implements IStorage {
 
   async getTextPostsByEvent(eventId: string): Promise<TextPostWithUser[]> {
     return await executeDbOperation(async (db) => {
-      let result = await db.select({
-      id: textPosts.id,
-      eventId: textPosts.eventId,
-      userId: textPosts.userId,
-      content: textPosts.content,
-      createdAt: textPosts.createdAt,
-      userName: appUsers.fullName,
-    }).from(textPosts)
-      .innerJoin(appUsers, eq(textPosts.userId, appUsers.id))
-      .where(eq(textPosts.eventId, eventId))
-      .orderBy(desc(textPosts.createdAt));
-    
-    // If no results, try with event_users table (for legacy posts)
-    if (result.length === 0) {
-      result = await db.select({
+      // Get all posts for this event
+      const allPosts = await db.select({
         id: textPosts.id,
         eventId: textPosts.eventId,
         userId: textPosts.userId,
         content: textPosts.content,
         createdAt: textPosts.createdAt,
-        userName: eventUsers.name,
       }).from(textPosts)
-        .innerJoin(eventUsers, eq(textPosts.userId, eventUsers.id))
         .where(eq(textPosts.eventId, eventId))
         .orderBy(desc(textPosts.createdAt));
+    
+      // For each post, try to get the user name from app_users first, then event_users
+      const postsWithUsers: TextPostWithUser[] = [];
+      
+      for (const post of allPosts) {
+        let userName = 'Usuario Invitado';
+        
+        if (post.userId) {
+          // Try app_users first
+          const appUser = await db.select({ fullName: appUsers.fullName })
+            .from(appUsers)
+            .where(eq(appUsers.id, post.userId))
+            .limit(1);
+          
+          if (appUser.length > 0 && appUser[0].fullName) {
+            userName = appUser[0].fullName;
+          } else {
+            // Try event_users
+            const eventUser = await db.select({ name: eventUsers.name })
+              .from(eventUsers)
+              .where(eq(eventUsers.id, post.userId))
+              .limit(1);
+            
+            if (eventUser.length > 0 && eventUser[0].name) {
+              userName = eventUser[0].name;
+            } else {
+              // Generate guest name from userId
+              userName = `Usuario Invitado ${(post.userId || '').slice(-4)}`;
+            }
+          }
+        }
+        
+        postsWithUsers.push({
+          ...post,
+          userName,
+        });
       }
       
-      return result;
+      return postsWithUsers;
     });
   }
 
