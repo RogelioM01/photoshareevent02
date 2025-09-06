@@ -366,10 +366,14 @@ export default function EventSettings() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="basico" className="flex items-center space-x-2">
             <User className="w-4 h-4" />
             <span>Básico</span>
+          </TabsTrigger>
+          <TabsTrigger value="herramientas" className="flex items-center space-x-2">
+            <Settings className="w-4 h-4" />
+            <span>Herramientas</span>
           </TabsTrigger>
           <TabsTrigger value="apariencia" className="flex items-center space-x-2">
             <Palette className="w-4 h-4" />
@@ -641,6 +645,39 @@ export default function EventSettings() {
                 </div>
               </div>
 
+
+              <Separator />
+              
+              <div className="flex justify-end">
+                <Button 
+                  onClick={handleSave} 
+                  disabled={isUpdating}
+                  className={rockyButtonStyles.primary}
+                >
+                  {isUpdating ? (
+                    <>
+                      <Loader2 className={rockyLoadingStyles.spinner} />
+                      <span className={rockyLoadingStyles.text}>Guardando...</span>
+                    </>
+                  ) : (
+                    <span className="text-white font-semibold">Guardar Cambios</span>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Pestaña Herramientas */}
+        <TabsContent value="herramientas">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Settings className="w-5 h-5 mr-2" />
+                Herramientas de Gestión
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
               {/* Download Gallery Section */}
               <div className="border border-blue-200 rounded-lg p-6 bg-blue-50/50">
                 <div className="flex items-center justify-between mb-4">
@@ -739,25 +776,6 @@ export default function EventSettings() {
                     />
                   </div>
                 </div>
-              </div>
-
-              <Separator />
-              
-              <div className="flex justify-end">
-                <Button 
-                  onClick={handleSave} 
-                  disabled={isUpdating}
-                  className={rockyButtonStyles.primary}
-                >
-                  {isUpdating ? (
-                    <>
-                      <Loader2 className={rockyLoadingStyles.spinner} />
-                      <span className={rockyLoadingStyles.text}>Guardando...</span>
-                    </>
-                  ) : (
-                    <span className="text-white font-semibold">Guardar Cambios</span>
-                  )}
-                </Button>
               </div>
             </CardContent>
           </Card>
