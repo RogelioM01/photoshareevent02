@@ -444,7 +444,7 @@ export default function Gallery() {
         {/* Stats Counter */}
         <div className="absolute bottom-4 right-4 flex items-center space-x-2 text-white">
           <span className="text-sm font-medium">
-            {allContent.length} fotos, videos y publicaciones
+            {photos.filter(p => !p.isVideo).length} fotos • {photos.filter(p => p.isVideo).length} videos • {textPosts.length} mensajes
           </span>
           <ChevronDown className="w-5 h-5" />
         </div>
