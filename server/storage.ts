@@ -481,11 +481,31 @@ export class DatabaseStorage implements IStorage {
   extractUserNameFromId(userId: string): string {
     // GUEST USER NAME EXTRACTION: Convert localStorage-generated user IDs to display names
     // Examples: 'raul-user-id' → 'Raul', 'sofia-user-id' → 'Sofia', 'javier-user-id' → 'Javier'
-    // This function is called when userName is null from LEFT JOIN (guest users)
+    // New support: 'guest-maria-rodriguez' → 'Maria Rodriguez', 'guest-1234567' → 'Usuario Invitado 1234'
+    if (!userId) return 'Usuario';
+    
+    // Original format: name-user-id
     if (userId.endsWith('-user-id')) {
       const name = userId.replace('-user-id', '');
       return name.charAt(0).toUpperCase() + name.slice(1);
     }
+    
+    // New format: guest-name-surname or guest-timestamp
+    if (userId.startsWith('guest-')) {
+      const guestPart = userId.replace('guest-', '');
+      
+      // Check if it's a name (contains letters, not just numbers)
+      if (/[a-zA-Z]/.test(guestPart) && !guestPart.match(/^\d+$/)) {
+        // Convert hyphenated names: 'maria-rodriguez' → 'Maria Rodriguez'
+        return guestPart.split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      } else {
+        // Fallback for numeric IDs: 'guest-1234567' → 'Usuario Invitado 1234'
+        return `Usuario Invitado ${guestPart.slice(-4)}`;
+      }
+    }
+    
     // Fallback for any unexpected user ID format
     return 'Usuario';
   }
@@ -520,59 +540,26 @@ export class DatabaseStorage implements IStorage {
 
   async getTextPostsByEvent(eventId: string): Promise<TextPostWithUser[]> {
     return await executeDbOperation(async (db) => {
-      // Get all posts for this event
-      const posts = await db.select({
+      // SAME AS PHOTOS: Get posts with LEFT JOIN to event_users for user names
+      const result = await db.select({
         id: textPosts.id,
         eventId: textPosts.eventId,
         userId: textPosts.userId,
         content: textPosts.content,
         createdAt: textPosts.createdAt,
+        userName: eventUsers.name, // This will be null for guest users
       }).from(textPosts)
+        .leftJoin(eventUsers, eq(textPosts.userId, eventUsers.id))
         .where(eq(textPosts.eventId, eventId))
         .orderBy(desc(textPosts.createdAt));
-    
-      // For each post, try to get the user name from event_users, then app_users
-      const postsWithUsers: TextPostWithUser[] = [];
       
-      for (const post of posts) {
-        let userName = 'Usuario Invitado';
-        
-        if (post.userId) {
-          // Try event_users first (where guest names are stored)
-          const eventUser = await db.select({ name: eventUsers.name })
-            .from(eventUsers)
-            .where(eq(eventUsers.id, post.userId))
-            .limit(1);
-          
-          if (eventUser.length > 0 && eventUser[0].name) {
-            userName = eventUser[0].name;
-          } else {
-            // Try app_users for registered users
-            const appUser = await db.select({ fullName: appUsers.fullName })
-              .from(appUsers)
-              .where(eq(appUsers.id, post.userId))
-              .limit(1);
-            
-            if (appUser.length > 0 && appUser[0].fullName) {
-              userName = appUser[0].fullName;
-            } else {
-              // Generate guest name from userId
-              userName = `Usuario Invitado ${(post.userId || '').slice(-4)}`;
-            }
-          }
-        }
-        
-        postsWithUsers.push({
-          id: post.id,
-          eventId: post.eventId,
-          userId: post.userId,
-          content: post.content,
-          createdAt: post.createdAt,
-          userName,
-        });
-      }
+      // SAME AS PHOTOS: Apply extractUserNameFromId fallback for guest users
+      const formattedResult = result.map(post => ({
+        ...post,
+        userName: post.userName || this.extractUserNameFromId(post.userId)
+      }));
       
-      return postsWithUsers;
+      return formattedResult;
     });
   }
 
