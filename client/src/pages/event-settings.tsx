@@ -25,7 +25,10 @@ import {
   UserCheck,
   CalendarIcon,
   Clock,
-  Globe
+  Globe,
+  Link as LinkIcon,
+  Copy,
+  ExternalLink
 } from "lucide-react";
 import BackgroundSelector from "@/components/background-selector";
 import { usePersonalEvent, type PersonalEventFormData } from "@/hooks/usePersonalEvent";
@@ -104,6 +107,45 @@ export default function EventSettings() {
       setLocation("/");
     }
   }, [currentUser, setLocation]);
+
+  // UTILITY FUNCTIONS for Registration Link Section
+  const constructRegistrationUrl = () => {
+    if (!currentUser?.username) return "";
+    return `${window.location.origin}/evento/${currentUser.username}/registro`;
+  };
+
+  const copyRegistrationLink = async () => {
+    const url = constructRegistrationUrl();
+    if (!url) {
+      toast({
+        title: "Error",
+        description: "No se pudo generar el enlace de registro",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      toast({
+        title: "¡Enlace copiado!",
+        description: "El enlace de registro se copió al portapapeles",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Error al copiar",
+        description: "No se pudo copiar el enlace al portapapeles",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const openRegistrationPage = () => {
+    if (!currentUser?.username) return;
+    const url = `/evento/${currentUser.username}/registro`;
+    setLocation(url);
+  };
 
   // AUTO-DETECT TIMEZONE: Set user's timezone on first load
   useEffect(() => {
@@ -739,6 +781,54 @@ export default function EventSettings() {
                     size="sm"
                   >
                     {isUpdating ? "Guardando..." : "Guardar Redirección"}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Registration Link Section */}
+              <div className="border border-green-200 rounded-lg p-4 bg-green-50/50">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex-1">
+                    <Label className="text-base font-medium">
+                      Enlace Directo de Registro
+                    </Label>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Comparte este enlace con tus invitados para que puedan registrarse directamente 
+                      a tu evento sin necesidad de buscar tu página.
+                    </p>
+                  </div>
+                  <LinkIcon className="w-6 h-6 text-green-600" />
+                </div>
+                
+                {/* Registration URL Display */}
+                <div className="mb-4 p-3 bg-white rounded-lg border border-green-200">
+                  <p className="text-sm text-gray-500 mb-1">URL de Registro:</p>
+                  <p className="text-sm font-mono text-green-700 break-all">
+                    {constructRegistrationUrl()}
+                  </p>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-3 border-t border-green-200">
+                  <Button 
+                    onClick={openRegistrationPage}
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 flex-1"
+                    size="sm"
+                    data-testid="button-open-registration"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Abrir Página de Registro
+                  </Button>
+                  
+                  <Button 
+                    onClick={copyRegistrationLink}
+                    variant="outline"
+                    className="border-green-300 text-green-700 hover:bg-green-100 px-4 py-2"
+                    size="sm"
+                    data-testid="button-copy-registration-link"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copiar Enlace
                   </Button>
                 </div>
               </div>
