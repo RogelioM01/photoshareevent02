@@ -459,21 +459,59 @@ export default function Gallery() {
               <div key={i} className="aspect-square bg-gray-200 rounded-xl animate-pulse"></div>
             ))}
           </div>
-        ) : allContent.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allContent.map((item, index) => (
-              <PhotoGridItem
-                key={`${item.type}-${item.id}`}
-                item={item}
-                index={index}
-                currentUser={currentUser}
-                isEventOwner={isEventOwner}
-                onItemClick={memoizedHandleItemClick}
-                onLike={handleLikePhoto}
-                onDeletePhoto={handleDeletePhoto}
-                onDeleteTextPost={handleDeleteTextPost}
-              />
-            ))}
+        ) : photos.length > 0 || textPosts.length > 0 ? (
+          <div className="space-y-8">
+            {/* Fotos y Videos Section */}
+            {photos.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {photos.map((item, index) => (
+                  <PhotoGridItem
+                    key={`photo-${item.id}`}
+                    item={{ ...item, type: 'photo' as const }}
+                    index={index}
+                    currentUser={currentUser}
+                    isEventOwner={isEventOwner}
+                    onItemClick={memoizedHandleItemClick}
+                    onLike={handleLikePhoto}
+                    onDeletePhoto={handleDeletePhoto}
+                    onDeleteTextPost={handleDeleteTextPost}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Separator for Messages */}
+            {textPosts.length > 0 && (
+              <>
+                <div className="relative my-8">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="bg-gray-50 px-6 py-2 text-gray-500 font-medium rounded-full">
+                      Mensajes
+                    </span>
+                  </div>
+                </div>
+
+                {/* Messages Section */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {textPosts.map((item, index) => (
+                    <PhotoGridItem
+                      key={`post-${item.id}`}
+                      item={{ ...item, type: 'post' as const }}
+                      index={photos.length + index}
+                      currentUser={currentUser}
+                      isEventOwner={isEventOwner}
+                      onItemClick={memoizedHandleItemClick}
+                      onLike={handleLikePhoto}
+                      onDeletePhoto={handleDeletePhoto}
+                      onDeleteTextPost={handleDeleteTextPost}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <div className="text-center py-12">
