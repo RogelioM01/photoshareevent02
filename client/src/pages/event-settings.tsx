@@ -32,7 +32,8 @@ import {
   Download,
   Image,
   Edit,
-  QrCode
+  QrCode,
+  Share2
 } from "lucide-react";
 import BackgroundSelector from "@/components/background-selector";
 import { usePersonalEvent, type PersonalEventFormData } from "@/hooks/usePersonalEvent";
