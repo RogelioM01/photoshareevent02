@@ -7,6 +7,10 @@ const deploymentTimestamp = Date.now();
 console.log("🔥 DEPLOYMENT FORCE UPDATE:", `v3.2.REPLIT.${deploymentTimestamp}`);
 console.log("⏰ Deployment Time:", new Date().toISOString());
 
+// Deployment verification
+console.log("🎯 Target Build:", "index-DmqCKjKI.js");
+console.log("📋 Expected: Mi evento (not Panel de Control)");
+
 // Version logging with deployment timestamp
 console.log("🔥 APP LOADED - VERSION: v3.2.REPLIT.240925");
 console.log("🌍 Environment:", import.meta.env.MODE);
