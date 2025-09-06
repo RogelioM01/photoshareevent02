@@ -215,6 +215,7 @@ export default function UploadModal({ event, onClose }: UploadModalProps) {
       await createTextPost.mutateAsync({
         eventId: event.id,
         userId: userToUse.id,
+        userName: userToUse.name,
         content: textContent.trim(),
       });
 

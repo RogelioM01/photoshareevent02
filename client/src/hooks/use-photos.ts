@@ -83,8 +83,8 @@ export function useCreateTextPost() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ eventId, userId, content }: { eventId: string; userId: string; content: string }) => {
-      const res = await apiRequest(`/api/events/${eventId}/posts`, "POST", { userId, content });
+    mutationFn: async ({ eventId, userId, userName, content }: { eventId: string; userId: string; userName: string; content: string }) => {
+      const res = await apiRequest(`/api/events/${eventId}/posts`, "POST", { userId, content, userName });
       return res.json();
     },
     onSuccess: (data, variables) => {

@@ -521,7 +521,7 @@ export class DatabaseStorage implements IStorage {
   async getTextPostsByEvent(eventId: string): Promise<TextPostWithUser[]> {
     return await executeDbOperation(async (db) => {
       // Get all posts for this event
-      const allPosts = await db.select({
+      const posts = await db.select({
         id: textPosts.id,
         eventId: textPosts.eventId,
         userId: textPosts.userId,
@@ -531,30 +531,30 @@ export class DatabaseStorage implements IStorage {
         .where(eq(textPosts.eventId, eventId))
         .orderBy(desc(textPosts.createdAt));
     
-      // For each post, try to get the user name from app_users first, then event_users
+      // For each post, try to get the user name from event_users, then app_users
       const postsWithUsers: TextPostWithUser[] = [];
       
-      for (const post of allPosts) {
+      for (const post of posts) {
         let userName = 'Usuario Invitado';
         
         if (post.userId) {
-          // Try app_users first
-          const appUser = await db.select({ fullName: appUsers.fullName })
-            .from(appUsers)
-            .where(eq(appUsers.id, post.userId))
+          // Try event_users first (where guest names are stored)
+          const eventUser = await db.select({ name: eventUsers.name })
+            .from(eventUsers)
+            .where(eq(eventUsers.id, post.userId))
             .limit(1);
           
-          if (appUser.length > 0 && appUser[0].fullName) {
-            userName = appUser[0].fullName;
+          if (eventUser.length > 0 && eventUser[0].name) {
+            userName = eventUser[0].name;
           } else {
-            // Try event_users
-            const eventUser = await db.select({ name: eventUsers.name })
-              .from(eventUsers)
-              .where(eq(eventUsers.id, post.userId))
+            // Try app_users for registered users
+            const appUser = await db.select({ fullName: appUsers.fullName })
+              .from(appUsers)
+              .where(eq(appUsers.id, post.userId))
               .limit(1);
             
-            if (eventUser.length > 0 && eventUser[0].name) {
-              userName = eventUser[0].name;
+            if (appUser.length > 0 && appUser[0].fullName) {
+              userName = appUser[0].fullName;
             } else {
               // Generate guest name from userId
               userName = `Usuario Invitado ${(post.userId || '').slice(-4)}`;
@@ -563,7 +563,11 @@ export class DatabaseStorage implements IStorage {
         }
         
         postsWithUsers.push({
-          ...post,
+          id: post.id,
+          eventId: post.eventId,
+          userId: post.userId,
+          content: post.content,
+          createdAt: post.createdAt,
           userName,
         });
       }

@@ -443,10 +443,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/events/:eventId/posts", async (req, res) => {
     try {
       const { eventId } = req.params;
-      const { userId, content } = req.body;
+      const { userId, content, userName } = req.body;
       
       // Simple validation
-      if (!userId || !content || !eventId) {
+      if (!userId || !content || !eventId || !userName) {
         return res.status(400).json({ message: "Missing required fields" });
       }
       
@@ -455,6 +455,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId,
         content
       });
+      
+      // Store user name in event_users table for future reference if not exists
+      try {
+        await storage.createEventUser({
+          id: userId,
+          eventId,
+          name: userName,
+        });
+      } catch (error) {
+        // User might already exist, ignore error
+        console.log("User already exists in event_users:", userId);
+      }
       
       res.json(post);
     } catch (error) {
