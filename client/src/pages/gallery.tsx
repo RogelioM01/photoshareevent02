@@ -414,14 +414,6 @@ export default function Gallery() {
         {/* Hero Content */}
         <div className="relative h-full flex items-center justify-center">
           <div className="text-center text-white px-4">
-            {/* Event Profile Picture */}
-            <div className="w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-xl border-4 border-white/30">
-              <img 
-                src={event.coverImageUrl || "https://images.unsplash.com/photo-1566737236500-c8ac43014a8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150"}
-                alt={`Foto de perfil del evento ${event.title}`}
-                className="w-full h-full object-cover"
-              />
-            </div>
             
             {/* Event Title with serif font */}
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-3 drop-shadow-lg">
