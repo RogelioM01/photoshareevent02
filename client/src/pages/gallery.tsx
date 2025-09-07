@@ -87,7 +87,18 @@ export default function Gallery() {
     });
   }, [photos.length, photosLoading, currentUser?.id, event?.id]); // Reduced dependencies
 
-  const { data: textPosts = [] } = useTextPosts(event?.id || "");
+  const { data: textPosts = [], isLoading: textPostsLoading, error: textPostsError } = useTextPosts(event?.id || "");
+  
+  // Debug logging for text posts state changes
+  useEffect(() => {
+    logger.log("📝 Gallery text posts state updated:", {
+      textPostsCount: textPosts.length,
+      textPostsLoading,
+      textPostsError: textPostsError?.message,
+      eventId: event?.id,
+      textPostIds: textPosts.map(p => p.id)
+    });
+  }, [textPosts.length, textPostsLoading, event?.id]);
   const deletePhoto = useDeletePhoto();
   const deleteTextPost = useDeleteTextPost();
   const likePhoto = useLikePhoto();

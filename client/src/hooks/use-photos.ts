@@ -27,6 +27,18 @@ export function usePhotos(eventId: string, userId?: string) {
 export function useTextPosts(eventId: string) {
   return useQuery<TextPostWithUser[]>({
     queryKey: ["/api/events", eventId, "posts", "v2-clean-names"],
+    queryFn: async () => {
+      const url = `/api/events/${eventId}/posts/v2-clean-names`;
+      logger.log(`🔍 Fetching text posts from: ${url}`);
+      const response = await fetch(url);
+      if (!response.ok) {
+        logger.error(`❌ Text posts fetch failed: ${response.status} ${response.statusText}`);
+        throw new Error('Failed to fetch text posts');
+      }
+      const data = await response.json();
+      logger.log(`📝 Received ${data.length} text posts:`, data.map((p: any) => ({ id: p.id, content: p.content.substring(0, 50), userName: p.userName })));
+      return data;
+    },
     enabled: !!eventId,
   });
 }
