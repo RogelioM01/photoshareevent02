@@ -184,7 +184,7 @@ const PhotoGridItem = memo(function PhotoGridItem({
           
           <p className="text-base font-medium text-gray-800 line-clamp-4 leading-relaxed mb-2">{item.content}</p>
           <div className="mt-3 flex items-center justify-center">
-            <span className="px-3 py-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white text-sm font-semibold rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
+            <span className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
               {item.userName}
             </span>
           </div>
