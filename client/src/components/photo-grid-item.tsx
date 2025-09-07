@@ -172,6 +172,10 @@ const PhotoGridItem = memo(function PhotoGridItem({
   }, [item, onItemClick]);
 
   const showDeleteButton = !!(currentUser && (item.userId === currentUser.id || isEventOwner));
+  
+  // Detect theme for text posts
+  const messageTheme = item.type === 'post' && item.content ? detectMessageTheme(item.content) : null;
+  const ThemeIcon = messageTheme?.icon;
 
   return (
     <div 
@@ -253,7 +257,7 @@ const PhotoGridItem = memo(function PhotoGridItem({
           </div>
         )
       ) : (
-        <div className="relative p-6 h-full flex flex-col justify-center text-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50">
+        <div className={`relative p-6 h-full flex flex-col justify-center text-center bg-gradient-to-br ${messageTheme?.bgGradient || 'from-blue-50 via-purple-50 to-pink-50'} shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50`}>
           {/* Delete button - show for post owner or event owner */}
           {showDeleteButton && (
             <button
@@ -264,9 +268,18 @@ const PhotoGridItem = memo(function PhotoGridItem({
             </button>
           )}
           
+          {/* Thematic icon */}
+          {ThemeIcon && (
+            <div className="flex justify-center mb-3">
+              <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${messageTheme?.gradient} flex items-center justify-center shadow-md`}>
+                <ThemeIcon className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          )}
+          
           <p className="text-base font-medium text-gray-800 line-clamp-4 leading-relaxed mb-2">{item.content}</p>
           <div className="mt-3 flex items-center justify-center">
-            <span className="px-3 py-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white text-sm font-semibold rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
+            <span className={`px-3 py-1.5 bg-gradient-to-r ${messageTheme?.gradient || 'from-blue-500 via-purple-500 to-pink-500'} text-white text-sm font-semibold rounded-full shadow-md hover:shadow-lg transition-shadow duration-200`}>
               {item.userName}
             </span>
           </div>
