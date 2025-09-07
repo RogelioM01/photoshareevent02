@@ -94,9 +94,7 @@ const PhotoGridItem = memo(function PhotoGridItem({
   return (
     <div 
       key={`${item.type}-${item.id}`} 
-      className={`aspect-square bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group ${
-        item.type === 'post' ? 'hover:scale-105 hover:rotate-1' : ''
-      }`}
+      className="aspect-square bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group"
       onClick={handleItemClick}
     >
       {item.type === 'photo' ? (
@@ -173,37 +171,25 @@ const PhotoGridItem = memo(function PhotoGridItem({
           </div>
         )
       ) : (
-        <div className="relative p-4 h-full flex flex-col justify-start text-left bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-md border-l-4 border-blue-400 shadow-md hover:shadow-lg transition-all duration-300">
+        <div className="relative p-4 h-full flex flex-col justify-center text-center bg-gradient-to-br from-gray-50 to-gray-100">
           {/* Delete button - show for post owner or event owner */}
           {showDeleteButton && (
             <button
               onClick={handleDeleteTextPost}
-              className="absolute top-2 right-2 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+              className="absolute top-2 right-2 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
             >
-              <Trash2 className="w-3 h-3" />
+              <Trash2 className="w-4 h-4" />
             </button>
           )}
           
-          {/* User badge - positioned like chat sender */}
-          <div className="mb-2">
-            <span className="inline-flex items-center px-2.5 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs font-medium rounded-full shadow-sm">
+          <p className="text-sm text-gray-700 line-clamp-4">{item.content}</p>
+          <div className="mt-3 flex items-center justify-center">
+            <span className="px-2 py-1 bg-gradient-to-r from-gray-600 to-gray-700 text-white text-xs font-medium rounded-full shadow-sm">
               {item.userName}
             </span>
           </div>
-          
-          {/* Message content */}
-          <p className="text-sm text-gray-800 line-clamp-4 leading-relaxed flex-1">{item.content}</p>
-          
-          {/* Timestamp - positioned like chat timestamp */}
-          <div className="mt-2 flex justify-end">
-            <span className="text-xs text-gray-500 bg-white/60 px-2 py-1 rounded-full">
-              {new Date(item.createdAt).toLocaleDateString('es-ES', { 
-                month: 'short', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </span>
+          <div className="text-xs text-gray-400 mt-1">
+            {new Date(item.createdAt).toLocaleDateString()}
           </div>
         </div>
       )}
