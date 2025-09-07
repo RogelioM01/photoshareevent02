@@ -542,7 +542,7 @@ export default function Gallery() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <style jsx>{`
+      <style>{`
         .fab-upload-button {
           position: fixed;
           bottom: 2rem;
