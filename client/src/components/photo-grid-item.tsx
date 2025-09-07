@@ -86,7 +86,6 @@ const PhotoGridItem = memo(function PhotoGridItem({
 
   const handleCommentsClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    // Allow everyone to view comments, not just logged-in users
     onItemClick(item);
   }, [item, onItemClick]);
 

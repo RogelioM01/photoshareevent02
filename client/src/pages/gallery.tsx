@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import UploadModal from "@/components/upload-modal";
 import ContentViewer from "@/components/content-viewer";
+import { GuestNameModal } from "@/components/guest-name-modal";
 import VideoThumbnail from "@/components/video-thumbnail";
 import { useAuth } from "@/contexts/auth-context";
 import { generateTextPostImage } from "@/utils/text-to-image";
@@ -44,6 +45,7 @@ export default function Gallery() {
   // Modal states
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedContentIndex, setSelectedContentIndex] = useState<number | null>(null);
+  const [showGuestNameModal, setShowGuestNameModal] = useState(false);
   
   // Delete confirmation dialog state
   const [deleteDialog, setDeleteDialog] = useState({
@@ -374,9 +376,15 @@ export default function Gallery() {
 
   // Update the memoized function dependencies
   const memoizedHandleItemClick = useCallback((item: any) => {
+    // Check if user needs to enter name for interactive features
+    if (!effectiveUserId) {
+      setShowGuestNameModal(true);
+      return;
+    }
+    
     const contentIndex = allContent.findIndex(c => c.id === item.id && c.type === item.type);
     setSelectedContentIndex(contentIndex);
-  }, [allContent]);
+  }, [allContent, effectiveUserId]);
 
   // Only show loading if event is not loaded yet
   // Allow gallery to render even without currentUser (guest users)
@@ -559,6 +567,17 @@ export default function Gallery() {
           onClose={() => setShowUploadModal(false)}
         />
       )}
+
+      {/* Guest Name Modal */}
+      <GuestNameModal
+        isOpen={showGuestNameModal}
+        onClose={() => setShowGuestNameModal(false)}
+        eventId={event?.id || ""}
+        onSuccess={() => {
+          // After successfully entering name, close the modal
+          setShowGuestNameModal(false);
+        }}
+      />
 
       {/* Content Viewer */}
       {selectedContentIndex !== null && (
