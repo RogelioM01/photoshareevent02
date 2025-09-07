@@ -87,9 +87,22 @@ export default function Gallery() {
     });
   }, [photos.length, photosLoading, currentUser?.id, event?.id]); // Reduced dependencies
 
+  /**
+   * CRITICAL: Text Posts Data Fetching
+   * 
+   * BUG FIX HISTORY (2025-09-07):
+   * - useTextPosts was missing queryFn causing posts to not load
+   * - Endpoint was incorrect (/posts/v2-clean-names vs /posts)
+   * - Query key mismatch with mutation invalidations
+   * 
+   * DEBUGGING:
+   * - Check logs for "📝 Received X text posts" to confirm API works
+   * - If posts don't appear after creation, check cache invalidation
+   * - textPostsError will show JSON parsing or network errors
+   */
   const { data: textPosts = [], isLoading: textPostsLoading, error: textPostsError } = useTextPosts(event?.id || "");
   
-  // Debug logging for text posts state changes
+  // Debug logging for text posts state changes - KEEP for troubleshooting
   useEffect(() => {
     logger.log("📝 Gallery text posts state updated:", {
       textPostsCount: textPosts.length,

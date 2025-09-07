@@ -24,11 +24,24 @@ export function usePhotos(eventId: string, userId?: string) {
   });
 }
 
+/**
+ * CRITICAL: Text Posts Query Hook
+ * 
+ * BUG FIXES APPLIED (2025-09-07):
+ * 1. MUST have queryFn - React Query requires this to fetch data
+ * 2. Endpoint is `/api/events/${eventId}/posts` (NOT `/posts/v2-clean-names`)
+ * 3. Query key MUST match invalidation keys in mutations exactly
+ * 
+ * DO NOT REMOVE queryFn or change endpoint without updating:
+ * - useCreateTextPost invalidation
+ * - useDeleteTextPost invalidation
+ * - Backend routes in server/routes.ts
+ */
 export function useTextPosts(eventId: string) {
   return useQuery<TextPostWithUser[]>({
-    queryKey: ["/api/events", eventId, "posts"],
+    queryKey: ["/api/events", eventId, "posts"], // MUST match mutation invalidations
     queryFn: async () => {
-      const url = `/api/events/${eventId}/posts`;
+      const url = `/api/events/${eventId}/posts`; // CORRECT endpoint - do not add /v2-clean-names
       logger.log(`🔍 Fetching text posts from: ${url}`);
       const response = await fetch(url);
       if (!response.ok) {
@@ -91,6 +104,18 @@ export function useUploadPhotos() {
   });
 }
 
+/**
+ * CRITICAL: Create Text Post Mutation
+ * 
+ * Cache Invalidation Requirements:
+ * - Query key MUST exactly match useTextPosts query key
+ * - Current: ["/api/events", eventId, "posts"]
+ * - If you change useTextPosts query key, update this too
+ * 
+ * WHY THIS MATTERS:
+ * - Mismatched keys = text posts won't appear after creation
+ * - Must invalidate AND refetch for immediate UI updates
+ */
 export function useCreateTextPost() {
   const queryClient = useQueryClient();
   
@@ -100,13 +125,13 @@ export function useCreateTextPost() {
       return res.json();
     },
     onSuccess: (data, variables) => {
-      // Invalidate and refetch text posts
+      // CRITICAL: Query key must match useTextPosts exactly
       queryClient.invalidateQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts"], // MUST match useTextPosts
         exact: false 
       });
       queryClient.refetchQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts"], // MUST match useTextPosts
         exact: false
       });
     },
@@ -135,6 +160,17 @@ export function useDeletePhoto() {
   });
 }
 
+/**
+ * CRITICAL: Delete Text Post Mutation
+ * 
+ * Cache Invalidation Requirements:
+ * - Query key MUST exactly match useTextPosts query key
+ * - Current: ["/api/events", eventId, "posts"]
+ * 
+ * SYNCHRONIZED WITH:
+ * - useTextPosts query key
+ * - useCreateTextPost invalidation
+ */
 export function useDeleteTextPost() {
   const queryClient = useQueryClient();
   
@@ -144,13 +180,13 @@ export function useDeleteTextPost() {
       return res.json();
     },
     onSuccess: (data, variables) => {
-      // Invalidate and refetch text post queries
+      // CRITICAL: Query key must match useTextPosts exactly
       queryClient.invalidateQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts"], // MUST match useTextPosts
         exact: false 
       });
       queryClient.refetchQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts"], // MUST match useTextPosts
         exact: false
       });
     },
