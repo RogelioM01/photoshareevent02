@@ -1,4 +1,5 @@
- close: Check setDeleteDialog state reset
+  /*
+  * IMPORTANT: Check setDeleteDialog state reset
    * - If permissions error: Backend will return 403, frontend just handles UX
    */
   const confirmDelete = async () => {
