@@ -576,8 +576,8 @@ export default function Gallery() {
             }
           }}
           onNavigate={(newIndex) => setSelectedContentIndex(newIndex)}
-          currentUserId={currentUser?.id}
-          currentUserName={currentUser?.name}
+          currentUserId={effectiveUserId}
+          currentUserName={currentUser?.name || 'Usuario Invitado'}
           eventId={event?.id || ""}
         />
       )}

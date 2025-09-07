@@ -86,10 +86,9 @@ const PhotoGridItem = memo(function PhotoGridItem({
 
   const handleCommentsClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    if (currentUser) {
-      onItemClick(item);
-    }
-  }, [item, currentUser, onItemClick]);
+    // Allow everyone to view comments, not just logged-in users
+    onItemClick(item);
+  }, [item, onItemClick]);
 
   const showDeleteButton = !!(currentUser && (item.userId === currentUser.id || isEventOwner));
 
@@ -158,13 +157,10 @@ const PhotoGridItem = memo(function PhotoGridItem({
                   </span>
                 </button>
                 
-                {/* Comments button with count - Always visible, interactive only when logged in */}
+                {/* Comments button with count - Always visible and interactive */}
                 <button
                   onClick={handleCommentsClick}
-                  disabled={!currentUser}
-                  className={`flex items-center space-x-1 transition-transform ${
-                    currentUser ? 'hover:scale-110 cursor-pointer' : 'cursor-default'
-                  }`}
+                  className="flex items-center space-x-1 transition-transform hover:scale-110 cursor-pointer"
                 >
                   <MessageCircle className="w-4 h-4 text-white hover:text-blue-400 transition-colors" />
                   <span className="text-white text-xs font-medium">
