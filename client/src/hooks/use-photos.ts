@@ -26,9 +26,9 @@ export function usePhotos(eventId: string, userId?: string) {
 
 export function useTextPosts(eventId: string) {
   return useQuery<TextPostWithUser[]>({
-    queryKey: ["/api/events", eventId, "posts", "v2-clean-names"],
+    queryKey: ["/api/events", eventId, "posts"],
     queryFn: async () => {
-      const url = `/api/events/${eventId}/posts/v2-clean-names`;
+      const url = `/api/events/${eventId}/posts`;
       logger.log(`🔍 Fetching text posts from: ${url}`);
       const response = await fetch(url);
       if (!response.ok) {
@@ -100,13 +100,13 @@ export function useCreateTextPost() {
       return res.json();
     },
     onSuccess: (data, variables) => {
-      // Invalidate and refetch text posts with correct query key including v2-clean-names
+      // Invalidate and refetch text posts
       queryClient.invalidateQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
+        queryKey: ["/api/events", variables.eventId, "posts"],
         exact: false 
       });
       queryClient.refetchQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
+        queryKey: ["/api/events", variables.eventId, "posts"],
         exact: false
       });
     },
@@ -144,13 +144,13 @@ export function useDeleteTextPost() {
       return res.json();
     },
     onSuccess: (data, variables) => {
-      // Invalidate and refetch text post queries with correct query key including v2-clean-names
+      // Invalidate and refetch text post queries
       queryClient.invalidateQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
+        queryKey: ["/api/events", variables.eventId, "posts"],
         exact: false 
       });
       queryClient.refetchQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
+        queryKey: ["/api/events", variables.eventId, "posts"],
         exact: false
       });
     },
