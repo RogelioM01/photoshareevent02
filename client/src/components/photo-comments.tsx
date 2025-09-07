@@ -127,7 +127,7 @@ export function PhotoComments({
                 <div className="flex-1 min-w-0">
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl px-3 py-2">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-sm text-gray-900 dark:text-white">
+                      <span className="px-2 py-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-semibold rounded-full shadow-sm">
                         {comment.userName}
                       </span>
                       {currentUserId === comment.userId && (
