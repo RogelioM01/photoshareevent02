@@ -73,9 +73,10 @@ export default function UploadModal({ event, onClose }: UploadModalProps) {
       return;
     }
 
-    // Create a temporary user for this session
+    // Create a temporary user for this session with name embedded in ID
+    const sanitizedName = guestName.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z-]/g, '');
     const newTempUser: EventUser = {
-      id: `guest-${Date.now()}`, // Temporary ID for session
+      id: `guest-${sanitizedName}-${Date.now()}`, // Include name for proper identification
       name: guestName.trim(),
       eventId: event.id,
       createdAt: new Date() // Add required createdAt field
