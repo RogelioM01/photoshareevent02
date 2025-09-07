@@ -499,14 +499,20 @@ export class DatabaseStorage implements IStorage {
       return name.charAt(0).toUpperCase() + name.slice(1);
     }
     
-    // New format: guest-name-surname or guest-timestamp
+    // New format: guest-name-surname-timestamp or guest-timestamp
     if (userId.startsWith('guest-')) {
       const guestPart = userId.replace('guest-', '');
       
       // Check if it's a name (contains letters, not just numbers)
       if (/[a-zA-Z]/.test(guestPart) && !guestPart.match(/^\d+$/)) {
+        // Split by hyphen and filter out timestamp (pure numbers)
+        const parts = guestPart.split('-').filter(part => {
+          // Keep only parts that are not pure numbers (timestamps)
+          return !/^\d+$/.test(part);
+        });
+        
         // Convert hyphenated names: 'maria-rodriguez' → 'Maria Rodriguez'
-        return guestPart.split('-')
+        return parts
           .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join(' ');
       } else {
