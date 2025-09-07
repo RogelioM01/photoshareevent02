@@ -88,13 +88,13 @@ export function useCreateTextPost() {
       return res.json();
     },
     onSuccess: (data, variables) => {
-      // Invalidate and refetch text posts
+      // Invalidate and refetch text posts with correct query key including v2-clean-names
       queryClient.invalidateQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
         exact: false 
       });
       queryClient.refetchQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
         exact: false
       });
     },
@@ -132,13 +132,13 @@ export function useDeleteTextPost() {
       return res.json();
     },
     onSuccess: (data, variables) => {
-      // Invalidate and refetch text post queries
+      // Invalidate and refetch text post queries with correct query key including v2-clean-names
       queryClient.invalidateQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
         exact: false 
       });
       queryClient.refetchQueries({ 
-        queryKey: ["/api/events", variables.eventId, "posts"],
+        queryKey: ["/api/events", variables.eventId, "posts", "v2-clean-names"],
         exact: false
       });
     },
