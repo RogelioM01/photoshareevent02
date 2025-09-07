@@ -171,7 +171,7 @@ const PhotoGridItem = memo(function PhotoGridItem({
           </div>
         )
       ) : (
-        <div className="relative p-4 h-full flex flex-col justify-center text-center bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="relative p-6 h-full flex flex-col justify-center text-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50">
           {/* Delete button - show for post owner or event owner */}
           {showDeleteButton && (
             <button
@@ -182,13 +182,13 @@ const PhotoGridItem = memo(function PhotoGridItem({
             </button>
           )}
           
-          <p className="text-sm text-gray-700 line-clamp-4">{item.content}</p>
+          <p className="text-base font-medium text-gray-800 line-clamp-4 leading-relaxed mb-2">{item.content}</p>
           <div className="mt-3 flex items-center justify-center">
-            <span className="px-2 py-1 bg-gradient-to-r from-gray-600 to-gray-700 text-white text-xs font-medium rounded-full shadow-sm">
+            <span className="px-3 py-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white text-sm font-semibold rounded-full shadow-md hover:shadow-lg transition-shadow duration-200">
               {item.userName}
             </span>
           </div>
-          <div className="text-xs text-gray-400 mt-1">
+          <div className="text-sm text-gray-500 mt-2 font-medium">
             {new Date(item.createdAt).toLocaleDateString()}
           </div>
         </div>
