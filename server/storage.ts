@@ -491,6 +491,7 @@ export class DatabaseStorage implements IStorage {
     // GUEST USER NAME EXTRACTION: Convert localStorage-generated user IDs to display names
     // Examples: 'raul-user-id' → 'Raul', 'sofia-user-id' → 'Sofia', 'javier-user-id' → 'Javier'
     // New support: 'guest-maria-rodriguez' → 'Maria Rodriguez', 'guest-1234567' → 'Usuario Invitado 1234'
+    
     if (!userId) return 'Usuario';
     
     // Original format: name-user-id
@@ -506,13 +507,14 @@ export class DatabaseStorage implements IStorage {
       // Check if it's a name (contains letters, not just numbers)
       if (/[a-zA-Z]/.test(guestPart) && !guestPart.match(/^\d+$/)) {
         // Split by hyphen and filter out timestamp (pure numbers)
-        const parts = guestPart.split('-').filter(part => {
+        const allParts = guestPart.split('-');
+        const nameParts = allParts.filter(part => {
           // Keep only parts that are not pure numbers (timestamps)
           return !/^\d+$/.test(part);
         });
         
         // Convert hyphenated names: 'maria-rodriguez' → 'Maria Rodriguez'
-        return parts
+        return nameParts
           .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join(' ');
       } else {
