@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { Heart, MessageCircle, Trash2 } from 'lucide-react';
+import { Heart, MessageCircle, Trash2, PartyPopper, Gift, Users, Coffee, Music, Camera, Star } from 'lucide-react';
 import VideoThumbnail from './video-thumbnail';
 
 /* 
@@ -32,6 +32,88 @@ interface ContentItem {
   likeCount?: number;
   isLikedByCurrentUser?: boolean;
   commentCount?: number;
+}
+
+// Theme detection system
+interface MessageTheme {
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  gradient: string;
+  bgGradient: string;
+}
+
+const MESSAGE_THEMES: Record<string, MessageTheme> = {
+  celebration: {
+    name: 'Celebración',
+    icon: PartyPopper,
+    gradient: 'from-yellow-400 via-orange-500 to-red-500',
+    bgGradient: 'from-yellow-50 via-orange-50 to-red-50'
+  },
+  gratitude: {
+    name: 'Agradecimiento',
+    icon: Gift,
+    gradient: 'from-purple-400 via-pink-500 to-red-500',
+    bgGradient: 'from-purple-50 via-pink-50 to-red-50'
+  },
+  social: {
+    name: 'Social',
+    icon: Users,
+    gradient: 'from-blue-400 via-cyan-500 to-teal-500',
+    bgGradient: 'from-blue-50 via-cyan-50 to-teal-50'
+  },
+  food: {
+    name: 'Comida',
+    icon: Coffee,
+    gradient: 'from-amber-400 via-orange-500 to-yellow-500',
+    bgGradient: 'from-amber-50 via-orange-50 to-yellow-50'
+  },
+  music: {
+    name: 'Música',
+    icon: Music,
+    gradient: 'from-violet-400 via-purple-500 to-indigo-500',
+    bgGradient: 'from-violet-50 via-purple-50 to-indigo-50'
+  },
+  photo: {
+    name: 'Fotografía',
+    icon: Camera,
+    gradient: 'from-gray-400 via-gray-500 to-slate-500',
+    bgGradient: 'from-gray-50 via-gray-50 to-slate-50'
+  },
+  special: {
+    name: 'Especial',
+    icon: Star,
+    gradient: 'from-emerald-400 via-teal-500 to-cyan-500',
+    bgGradient: 'from-emerald-50 via-teal-50 to-cyan-50'
+  }
+};
+
+const THEME_KEYWORDS = {
+  celebration: ['feliz', 'celebrar', 'fiesta', 'cumpleaños', 'aniversario', 'boda', 'graduación', 'éxito', 'logro', 'victoria', 'wow', 'increíble', 'genial', 'perfecto', 'hermoso', 'espectacular'],
+  gratitude: ['gracias', 'agradezco', 'agradecido', 'bendecido', 'afortunado', 'privilegio', 'honor', 'aprecio', 'reconozco', 'valoro'],
+  social: ['amigos', 'familia', 'juntos', 'equipo', 'grupo', 'reunión', 'encuentro', 'compañía', 'unidos', 'nosotros', 'todos'],
+  food: ['comida', 'comer', 'delicioso', 'rico', 'sabroso', 'cocinar', 'chef', 'plato', 'cena', 'almuerzo', 'desayuno', 'brindis', 'vino', 'bebida'],
+  music: ['música', 'cantar', 'bailar', 'concierto', 'banda', 'canción', 'melodía', 'ritmo', 'dj', 'baile', 'danza'],
+  photo: ['foto', 'fotografía', 'imagen', 'recuerdo', 'momento', 'capturar', 'instantánea', 'selfie', 'retrato'],
+  special: ['especial', 'único', 'maravilloso', 'extraordinario', 'mágico', 'inolvidable', 'memorable', 'sorprendente', 'fantástico', 'sublime']
+};
+
+function detectMessageTheme(content: string): MessageTheme {
+  const normalizedContent = content.toLowerCase().trim();
+  
+  // Check each theme's keywords
+  for (const [themeKey, keywords] of Object.entries(THEME_KEYWORDS)) {
+    if (keywords.some(keyword => normalizedContent.includes(keyword))) {
+      return MESSAGE_THEMES[themeKey];
+    }
+  }
+  
+  // Default theme for unmatched content
+  return {
+    name: 'General',
+    icon: MessageCircle,
+    gradient: 'from-blue-500 via-purple-500 to-pink-500',
+    bgGradient: 'from-blue-50 via-purple-50 to-pink-50'
+  };
 }
 
 interface PhotoGridItemProps {
