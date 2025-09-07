@@ -34,9 +34,9 @@ export function useAddPhotoComment() {
         queryKey: [`/api/photos/${variables.photoId}/comments`] 
       });
       
-      // Invalidate photos with likes to update comment count
+      // Invalidate photos with likes to update comment count (updated keys)
       queryClient.invalidateQueries({ 
-        queryKey: ['/api/events', 'photos'],
+        queryKey: ['/api/events'],
         exact: false
       });
     }
@@ -65,9 +65,9 @@ export function useDeletePhotoComment() {
         queryKey: [`/api/photos/${variables.photoId}/comments`] 
       });
       
-      // Invalidate photos with likes to update comment count
+      // Invalidate photos with likes to update comment count (updated keys)
       queryClient.invalidateQueries({ 
-        queryKey: ['/api/events', 'photos'],
+        queryKey: ['/api/events'],
         exact: false
       });
     }
