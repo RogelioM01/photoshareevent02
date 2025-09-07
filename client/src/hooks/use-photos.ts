@@ -5,7 +5,7 @@ import type { Photo, TextPost, PhotoWithUser, PhotoWithUserAndLikes, TextPostWit
 
 export function usePhotos(eventId: string, userId?: string) {
   return useQuery<PhotoWithUserAndLikes[]>({
-    queryKey: ["/api/events", eventId, "photos", userId || "no-user"],
+    queryKey: ["/api/events", eventId, "photos", userId || "no-user", "v2-clean-names"],
     queryFn: async () => {
       const url = userId 
         ? `/api/events/${eventId}/photos?userId=${userId}`
@@ -26,7 +26,7 @@ export function usePhotos(eventId: string, userId?: string) {
 
 export function useTextPosts(eventId: string) {
   return useQuery<TextPostWithUser[]>({
-    queryKey: ["/api/events", eventId, "posts"],
+    queryKey: ["/api/events", eventId, "posts", "v2-clean-names"],
     enabled: !!eventId,
   });
 }
