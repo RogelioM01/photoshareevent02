@@ -36,6 +36,7 @@ Preferred communication style: Simple, everyday language.
 - **Performance Optimization**: Memoization of expensive calculations, granular cache invalidation for like/unlike operations, and resolution of infinite loop issues.
 - **Database Persistence**: Full database persistence of all event data including date, time, timezone, and configuration settings.
 - **Guest Registration System**: Native RSVP system with `event_attendees` table, backend APIs, and frontend components for confirmation, check-in, and statistics, supporting both registered users and external guests. Flexible user system allows unlimited guest users identified by generated IDs.
+- **Guest Name Display**: Intelligent name extraction system that converts guest IDs like `guest-maria-rodriguez-1757234276920` to clean display names like "Maria Rodriguez", automatically filtering out timestamps while preserving multi-word names.
 - **Separated Registration Routes**: Clear distinction between guest registration form (`/evento/:username/registro`) and admin check-in scanner (`/evento/:username/checkin`).
 - **Email Service Integration**: Dual Emailit-only system with intelligent failover (Emailit.com REST API primary, Emailit SMTP secondary) for automated event notifications (registration, check-in reminders, new photos, administrator attendee notifications) using HTML templates.
 - **Location System**: `eventPlace` and `eventAddress` fields for event location details with flexible text input.
