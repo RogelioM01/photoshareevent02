@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp, uuid, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, uuid, boolean, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -88,7 +88,7 @@ export const eventAttendees = pgTable("event_attendees", {
   guestWhatsapp: text("guest_whatsapp"), // Contact info for guest attendees
   
   // COMPANIONS SYSTEM - Phase 1: Field for number of companions
-  companionsCount: text("companions_count").default("0"), // Number of companions this attendee will bring
+  companionsCount: integer("companions_count").default(0), // Number of companions this attendee will bring
   
   // Attendance status: 'pending' -> 'confirmed' -> 'present' or 'absent'
   status: text("status").notNull().default("pending"), // 'pending' | 'confirmed' | 'present' | 'absent'
@@ -109,22 +109,22 @@ export const eventNotificationSettings = pgTable("event_notification_settings", 
   
   // Configuración de notificaciones granulares
   newPhotosEnabled: boolean("new_photos_enabled").default(true).notNull(),
-  newPhotosThreshold: text("new_photos_threshold").default("30").notNull(), // Cada X fotos subidas
+  newPhotosThreshold: integer("new_photos_threshold").default(30).notNull(), // Cada X fotos subidas
   
   attendeeConfirmationsEnabled: boolean("attendee_confirmations_enabled").default(true).notNull(),
-  attendeeConfirmationsThreshold: text("attendee_confirmations_threshold").default("5").notNull(), // Cada X confirmaciones (5/10/20)
+  attendeeConfirmationsThreshold: integer("attendee_confirmations_threshold").default(5).notNull(), // Cada X confirmaciones (5/10/20)
   
   newCommentsEnabled: boolean("new_comments_enabled").default(true).notNull(),
-  newCommentsThreshold: text("new_comments_threshold").default("15").notNull(), // Cada X comentarios
+  newCommentsThreshold: integer("new_comments_threshold").default(15).notNull(), // Cada X comentarios
   includeCommentsInEmail: boolean("include_comments_in_email").default(true).notNull(),
   
   eventReminderEnabled: boolean("event_reminder_enabled").default(true).notNull(),
   reminderDaysBefore: text("reminder_days_before").default("1,2").notNull(), // Días antes del evento (separados por coma)
   
   // Contadores para tracking de umbrales
-  lastPhotoCount: text("last_photo_count").default("0").notNull(),
-  lastCommentCount: text("last_comment_count").default("0").notNull(),
-  lastAttendeeCount: text("last_attendee_count").default("0").notNull(), // Conteo de confirmaciones para tracking de umbrales
+  lastPhotoCount: integer("last_photo_count").default(0).notNull(),
+  lastCommentCount: integer("last_comment_count").default(0).notNull(),
+  lastAttendeeCount: integer("last_attendee_count").default(0).notNull(), // Conteo de confirmaciones para tracking de umbrales
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
