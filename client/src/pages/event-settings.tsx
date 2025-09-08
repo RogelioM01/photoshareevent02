@@ -401,7 +401,7 @@ export default function EventSettings() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <User className="w-5 h-5 mr-2" />
-                Información Básica
+                Información
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
