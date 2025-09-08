@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { User, Shield, Database, Users, Plus, Edit, Trash2, Save, X, Eye, Power, Link } from "lucide-react";
+import { User, Shield, Database, Users, Plus, Edit, Trash2, Save, X, Eye, Power, Link, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -291,6 +291,15 @@ export default function AdminPanel() {
               variant="secondary"
             >
               Configurar Emails
+            </Button>
+            <Button
+              onClick={() => setLocation("/admin/global-features")}
+              variant="outline"
+              className="border-purple-600 text-purple-600 hover:bg-purple-50"
+              data-testid="button-nav-global-features"
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Configuración Global
             </Button>
           </div>
         </div>
