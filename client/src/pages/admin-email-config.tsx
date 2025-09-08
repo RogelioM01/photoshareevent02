@@ -19,8 +19,6 @@ interface EmailNotificationSettings {
   userRegistration: boolean;
   attendanceConfirmation: boolean;
   checkInReminder: boolean;
-  newPhotos: boolean;
-  photoThreshold: number;
   weeklyDigest: boolean;
   eventUpdates: boolean;
   systemAlerts: boolean;
@@ -56,8 +54,6 @@ export default function AdminEmailConfig() {
     userRegistration: true,
     attendanceConfirmation: true,
     checkInReminder: true,
-    newPhotos: true,
-    photoThreshold: 20,
     weeklyDigest: false,
     eventUpdates: true,
     systemAlerts: true
@@ -267,44 +263,6 @@ export default function AdminEmailConfig() {
                 />
               </div>
 
-              {/* Nuevas Fotos */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Label className="text-sm font-medium flex items-center gap-2">
-                      <Camera className="h-4 w-4" />
-                      Notificación de Nuevas Fotos
-                    </Label>
-                    <p className="text-xs text-muted-foreground">
-                      Email cuando se suben nuevas fotos al evento
-                    </p>
-                  </div>
-                  <Switch
-                    checked={notifications.newPhotos}
-                    onCheckedChange={(checked) => updateNotification('newPhotos', checked)}
-                  />
-                </div>
-
-                {notifications.newPhotos && (
-                  <div className="ml-6 space-y-2">
-                    <Label className="text-xs">Enviar cada:</Label>
-                    <Select 
-                      value={notifications.photoThreshold.toString()}
-                      onValueChange={(value) => updateNotification('photoThreshold', parseInt(value))}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="5">5 fotos</SelectItem>
-                        <SelectItem value="10">10 fotos</SelectItem>
-                        <SelectItem value="20">20 fotos</SelectItem>
-                        <SelectItem value="50">50 fotos</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-              </div>
 
               {/* Actualizaciones del Evento */}
               <div className="flex items-center justify-between">
