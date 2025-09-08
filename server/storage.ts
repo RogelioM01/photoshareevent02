@@ -1485,19 +1485,25 @@ export class DatabaseStorage implements IStorage {
         .limit(1);
 
       if (existing) {
+        // Limpiar campos que no deben ser actualizados (fechas y ID)
+        const { id, createdAt, updatedAt, ...cleanSettings } = settings as any;
+        
         // Actualizar configuración existente
         const [updated] = await db.update(globalFeatureSettings)
           .set({
-            ...settings,
+            ...cleanSettings,
             updatedAt: new Date()
           })
           .where(eq(globalFeatureSettings.id, existing.id))
           .returning();
         return updated;
       } else {
+        // Limpiar campos para nueva configuración también
+        const { id, createdAt, updatedAt, ...cleanSettings } = settings as any;
+        
         // Crear nueva configuración
         const [created] = await db.insert(globalFeatureSettings)
-          .values(settings)
+          .values(cleanSettings)
           .returning();
         return created;
       }
