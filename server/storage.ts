@@ -60,7 +60,7 @@ let usingPrimary = !!primaryDb;
 console.log(`🔧 Using ${usingPrimary ? 'Coolify PostgreSQL (Primary)' : 'Replit Local PostgreSQL (Fallback)'} database`);
 
 // FIXED: Single database operation for consistency
-async function executeDbOperation<T>(operation: (db: ReturnType<typeof drizzle>) => Promise<T>): Promise<T> {
+export async function executeDbOperation<T>(operation: (db: ReturnType<typeof drizzle>) => Promise<T>): Promise<T> {
   // Use the same database consistently - no fallback switching during runtime
   const dbToUse = activeDb;
   const dbType = isDatabaseCoolify ? "Coolify PostgreSQL" : "Local PostgreSQL";
