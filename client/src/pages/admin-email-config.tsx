@@ -86,10 +86,12 @@ export default function AdminEmailConfig() {
   // Mutation para guardar configuración
   const saveConfigMutation = useMutation({
     mutationFn: async (config: EmailNotificationSettings) => {
-      return apiRequest('/api/email-config/notifications', {
+      const response = await fetch('/api/email-config/notifications', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config)
       });
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -103,10 +105,12 @@ export default function AdminEmailConfig() {
   // Test específico por servicio
   const testServiceMutation = useMutation({
     mutationFn: async ({ service, email, name }: { service: string, email: string, name: string }) => {
-      return apiRequest('/api/email/test-service', {
+      const response = await fetch('/api/email/test-service', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ service, email, name })
       });
+      return response.json();
     },
     onSuccess: (_, variables) => {
       toast({
@@ -161,7 +165,7 @@ export default function AdminEmailConfig() {
       'resend': 'Resend',
       'none': 'Ninguno'
     };
-    return serviceNames[service] || service;
+    return (serviceNames as any)[service] || service;
   };
 
   const getServiceBadge = (service: string, status: 'primary' | 'secondary' | 'tertiary') => {
@@ -180,7 +184,7 @@ export default function AdminEmailConfig() {
 
     return (
       <Badge className={colors[status]}>
-        {serviceNames[service]} ({status === 'primary' ? '1°' : status === 'secondary' ? '2°' : '3°'})
+        {(serviceNames as any)[service]} ({status === 'primary' ? '1°' : status === 'secondary' ? '2°' : '3°'})
       </Badge>
     );
   };
