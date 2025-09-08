@@ -380,6 +380,8 @@ export class DatabaseStorage implements IStorage {
       // LOCATION FIELDS: Place and address now included
       ...(updates.eventPlace !== undefined && { eventPlace: updates.eventPlace }),
       ...(updates.eventAddress !== undefined && { eventAddress: updates.eventAddress }),
+      // MAX COMPANIONS FIELD: Added for RSVP limits
+      ...(updates.maxCompanions !== undefined && { maxCompanions: updates.maxCompanions }),
     };
     
     console.log('📝 UPDATE EVENT: Applying safe updates:', Object.keys(safeUpdates));
