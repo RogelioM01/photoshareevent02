@@ -34,6 +34,16 @@ interface EmailSystemStatus {
   lastTest: string;
 }
 
+interface EmailConfig {
+  services?: {
+    primary: 'emailit-api' | 'emailit-smtp' | 'resend';
+    secondary: 'emailit-api' | 'emailit-smtp' | 'resend' | 'none';
+    tertiary: 'emailit-api' | 'emailit-smtp' | 'resend' | 'none';
+  };
+  status?: 'active' | 'degraded' | 'error';
+  lastTest?: string;
+}
+
 export default function AdminEmailConfig() {
   const [testEmail, setTestEmail] = useState('2dcommx01@gmail.com');
   const [testName, setTestName] = useState('Usuario de Prueba');
@@ -54,7 +64,7 @@ export default function AdminEmailConfig() {
   });
 
   // Fetch email configuration con datos reales del sistema
-  const { data: emailConfig, isLoading: configLoading } = useQuery({
+  const { data: emailConfig, isLoading: configLoading } = useQuery<EmailConfig>({
     queryKey: ['/api/email-config'],
   });
 
