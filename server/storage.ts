@@ -565,7 +565,7 @@ export class DatabaseStorage implements IStorage {
         eventId: textPosts.eventId,
         userId: textPosts.userId,
         content: textPosts.content,
-        backgroundGradient: textPosts.backgroundGradient,
+        // backgroundGradient: textPosts.backgroundGradient, // Temporalmente comentado para arreglar el error
         createdAt: textPosts.createdAt,
         userName: eventUsers.name, // This will be null for guest users
       }).from(textPosts)
@@ -576,6 +576,7 @@ export class DatabaseStorage implements IStorage {
       // SAME AS PHOTOS: Apply extractUserNameFromId fallback for guest users
       const formattedResult = result.map(post => ({
         ...post,
+        backgroundGradient: 'from-blue-50 via-purple-50 to-pink-50', // Valor por defecto temporal
         userName: post.userName || this.extractUserNameFromId(post.userId || '')
       }));
       
