@@ -27,6 +27,8 @@ interface GlobalFeatureSettings {
   eventRemindersEnabled: boolean;
   defaultAttendeeConfirmationsEnabled: boolean;
   defaultEventRemindersEnabled: boolean;
+  defaultAttendeeConfirmationsThreshold?: number;
+  defaultReminderDaysBefore?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -65,7 +67,9 @@ export default function EventNotificationsSettings({ eventId }: EventNotificatio
       setSettings(prev => ({
         ...prev,
         attendeeConfirmationsEnabled: globalFeatures.defaultAttendeeConfirmationsEnabled,
+        attendeeConfirmationsThreshold: globalFeatures.defaultAttendeeConfirmationsThreshold?.toString() || '10',
         eventReminderEnabled: globalFeatures.defaultEventRemindersEnabled,
+        reminderDaysBefore: globalFeatures.defaultReminderDaysBefore || '3',
       }));
     }
   }, [notificationSettings, globalFeatures, isLoading]);

@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import { 
   Settings, Sliders, Camera, UserCheck, MessageSquare, Clock, 
   Shield, Check, AlertTriangle, Activity 
@@ -18,6 +20,8 @@ interface GlobalFeatureSettings {
   eventRemindersEnabled: boolean;
   defaultAttendeeConfirmationsEnabled: boolean;
   defaultEventRemindersEnabled: boolean;
+  defaultAttendeeConfirmationsThreshold?: number;
+  defaultReminderDaysBefore?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -76,7 +80,9 @@ export default function AdminGlobalFeatures() {
     attendeeConfirmationsEnabled: true,
     eventRemindersEnabled: true,
     defaultAttendeeConfirmationsEnabled: true,
-    defaultEventRemindersEnabled: true
+    defaultEventRemindersEnabled: true,
+    defaultAttendeeConfirmationsThreshold: 10,
+    defaultReminderDaysBefore: "3"
   };
 
   const handleSettingChange = (key: keyof GlobalFeatureSettings, value: boolean) => {
@@ -236,6 +242,86 @@ export default function AdminGlobalFeatures() {
                 data-testid="switch-default-reminders"
               />
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Configuraciones Específicas Predeterminadas */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Sliders className="w-5 h-5" />
+              <span>Configuraciones Predeterminadas Globales</span>
+            </CardTitle>
+            <CardDescription>
+              Establece los valores específicos que se aplicarán por defecto a todos los nuevos eventos
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+
+            {/* Umbral de Confirmaciones */}
+            {currentSettings.attendeeConfirmationsEnabled && (
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <UserCheck className="w-5 h-5 text-green-500" />
+                  <div>
+                    <Label className="text-base font-medium">Umbral de Confirmaciones</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Número predeterminado de confirmaciones para enviar notificación
+                    </p>
+                  </div>
+                </div>
+                <div className="ml-8">
+                  <Select 
+                    value={currentSettings.defaultAttendeeConfirmationsThreshold?.toString() || "10"}
+                    onValueChange={(value) => handleSettingChange('defaultAttendeeConfirmationsThreshold', parseInt(value))}
+                  >
+                    <SelectTrigger className="w-48">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5">5 confirmaciones</SelectItem>
+                      <SelectItem value="10">10 confirmaciones</SelectItem>
+                      <SelectItem value="20">20 confirmaciones</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+
+            {currentSettings.attendeeConfirmationsEnabled && currentSettings.eventRemindersEnabled && (
+              <Separator />
+            )}
+
+            {/* Días de Recordatorio */}
+            {currentSettings.eventRemindersEnabled && (
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <Clock className="w-5 h-5 text-orange-500" />
+                  <div>
+                    <Label className="text-base font-medium">Días de Recordatorio</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Días predeterminados antes del evento para enviar recordatorios
+                    </p>
+                  </div>
+                </div>
+                <div className="ml-8">
+                  <Select 
+                    value={currentSettings.defaultReminderDaysBefore || "3"}
+                    onValueChange={(value) => handleSettingChange('defaultReminderDaysBefore', value)}
+                  >
+                    <SelectTrigger className="w-48">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 día antes</SelectItem>
+                      <SelectItem value="2">2 días antes</SelectItem>
+                      <SelectItem value="3">3 días antes</SelectItem>
+                      <SelectItem value="5">5 días antes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
