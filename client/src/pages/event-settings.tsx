@@ -365,10 +365,6 @@ export default function EventSettings() {
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-bold">Mi evento</h1>
-                  {/* Cache verification indicator */}
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                    v3.2.REPLIT.240925 - Deploy Fix
-                  </span>
                   <p className="text-gray-300">{personalEvent.title}</p>
                 </div>
                 <ExternalLink className="w-5 h-5 opacity-70" />
