@@ -63,7 +63,7 @@ export default function EventSettings() {
     eventPlace: "",
     eventAddress: "",
     enableAutoRedirect: false,
-    maxCompanions: "2"
+    maxCompanions: "5"
   });
   const [activeTab, setActiveTab] = useState("basico");
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
