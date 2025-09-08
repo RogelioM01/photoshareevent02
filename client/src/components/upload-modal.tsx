@@ -24,6 +24,7 @@ export default function UploadModal({ event, onClose }: UploadModalProps) {
   const [dragActive, setDragActive] = useState(false);
   const [showTextPost, setShowTextPost] = useState(false);
   const [textContent, setTextContent] = useState("");
+  const [selectedGradient, setSelectedGradient] = useState("from-blue-50 via-purple-50 to-pink-50");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   
@@ -218,6 +219,7 @@ export default function UploadModal({ event, onClose }: UploadModalProps) {
         userId: userToUse.id,
         userName: userToUse.name,
         content: textContent.trim(),
+        backgroundGradient: selectedGradient,
       });
 
       toast({
@@ -314,6 +316,44 @@ export default function UploadModal({ event, onClose }: UploadModalProps) {
                 placeholder="Comparte tus pensamientos, recuerdos o mensajes..."
                 className="min-h-32 resize-none"
               />
+              
+              {/* Vista Previa del Mensaje */}
+              {textContent.trim() && (
+                <div className="mb-4">
+                  <Label className="text-sm font-medium text-gray-700 mb-2 block">Vista Previa</Label>
+                  <div className={`p-4 rounded-xl bg-gradient-to-br ${selectedGradient} border border-white/50 shadow-sm`}>
+                    <p className="text-base font-medium text-gray-800 line-clamp-3 leading-relaxed">
+                      {textContent.trim()}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Selector de Degradados */}
+              <div>
+                <Label className="text-sm font-medium text-gray-700 mb-3 block">Elige el fondo de tu mensaje</Label>
+                <div className="grid grid-cols-5 gap-2">
+                  {[
+                    "from-blue-50 via-purple-50 to-pink-50",
+                    "from-green-100 via-blue-100 to-purple-100", 
+                    "from-yellow-100 via-orange-100 to-red-100",
+                    "from-pink-100 via-purple-100 to-indigo-100",
+                    "from-gray-100 via-gray-200 to-gray-100"
+                  ].map((gradient, index) => (
+                    <button
+                      key={gradient}
+                      onClick={() => setSelectedGradient(gradient)}
+                      className={`aspect-square rounded-lg bg-gradient-to-br ${gradient} border-2 transition-all duration-200 ${
+                        selectedGradient === gradient 
+                          ? "border-blue-500 scale-105 shadow-md" 
+                          : "border-gray-300 hover:border-gray-400 hover:scale-102"
+                      }`}
+                      type="button"
+                    />
+                  ))}
+                </div>
+              </div>
+
               <div className="flex space-x-4">
                 <Button
                   variant="outline"
