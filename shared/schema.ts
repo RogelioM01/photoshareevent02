@@ -145,6 +145,10 @@ export const globalFeatureSettings = pgTable("global_feature_settings", {
   defaultAttendeeConfirmationsEnabled: boolean("default_attendee_confirmations_enabled").default(true).notNull(),
   defaultEventRemindersEnabled: boolean("default_event_reminders_enabled").default(true).notNull(),
   
+  // Configuraciones específicas predeterminadas (Opción 2: Configuración Predeterminada Global)
+  defaultAttendeeConfirmationsThreshold: integer("default_attendee_confirmations_threshold").default(10).notNull(),
+  defaultReminderDaysBefore: text("default_reminder_days_before").default("3").notNull(),
+  
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
