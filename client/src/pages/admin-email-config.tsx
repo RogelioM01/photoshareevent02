@@ -16,12 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 
 interface EmailNotificationSettings {
-  userRegistration: boolean;
   attendanceConfirmation: boolean;
-  checkInReminder: boolean;
-  weeklyDigest: boolean;
-  eventUpdates: boolean;
-  systemAlerts: boolean;
 }
 
 interface EmailSystemStatus {
@@ -51,12 +46,7 @@ export default function AdminEmailConfig() {
 
   // Configuración por defecto de notificaciones
   const [notifications, setNotifications] = useState<EmailNotificationSettings>({
-    userRegistration: true,
-    attendanceConfirmation: true,
-    checkInReminder: true,
-    weeklyDigest: false,
-    eventUpdates: true,
-    systemAlerts: true
+    attendanceConfirmation: true
   });
 
   // Fetch email configuration con datos reales del sistema
@@ -212,22 +202,6 @@ export default function AdminEmailConfig() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-4">
-              {/* Registro de Usuarios */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-sm font-medium flex items-center gap-2">
-                    <Users className="h-4 w-4" />
-                    Registro de Nuevos Usuarios
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Email cuando alguien se registra en un evento
-                  </p>
-                </div>
-                <Switch
-                  checked={notifications.userRegistration}
-                  onCheckedChange={(checked) => updateNotification('userRegistration', checked)}
-                />
-              </div>
 
               {/* Confirmación de Asistencia */}
               <div className="flex items-center justify-between">
@@ -246,40 +220,8 @@ export default function AdminEmailConfig() {
                 />
               </div>
 
-              {/* Recordatorios de Check-in */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-sm font-medium flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Recordatorios de Check-in
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Recordatorio el día del evento
-                  </p>
-                </div>
-                <Switch
-                  checked={notifications.checkInReminder}
-                  onCheckedChange={(checked) => updateNotification('checkInReminder', checked)}
-                />
-              </div>
 
 
-              {/* Actualizaciones del Evento */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-sm font-medium flex items-center gap-2">
-                    <Mail className="h-4 w-4" />
-                    Actualizaciones del Evento
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Cambios en fecha, lugar o detalles del evento
-                  </p>
-                </div>
-                <Switch
-                  checked={notifications.eventUpdates}
-                  onCheckedChange={(checked) => updateNotification('eventUpdates', checked)}
-                />
-              </div>
             </div>
 
             <Separator />
