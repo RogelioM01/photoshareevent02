@@ -373,8 +373,8 @@ export default function Gallery() {
               {event.title}
             </h1>
 
-            {/* Only show upload button if user is active or is a guest */}
-            {(!authUser || authUser.isActive) && (
+            {/* Only show upload button if event owner is active */}
+            {eventWithOwner?.ownerIsActive !== false && (
               <Button 
                 onClick={() => setShowUploadModal(true)}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-full text-lg font-medium shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
@@ -469,8 +469,8 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* Floating Action Button - Only show if user is active or is a guest */}
-        {(!authUser || authUser.isActive) && (
+        {/* Floating Action Button - Only show if event owner is active */}
+        {eventWithOwner?.ownerIsActive !== false && (
           <button
             onClick={() => setShowUploadModal(true)}
             className="fab-upload-button"
