@@ -2006,17 +2006,10 @@ Generado desde la galería de eventos
         console.log(`📧 NO SETTINGS FOUND - returning defaults for event: ${eventId}`);
         const defaultSettings = {
           adminEmail: '',
-          newPhotosEnabled: true,
-          newPhotosThreshold: '30',
           attendeeConfirmationsEnabled: true,
           attendeeConfirmationsThreshold: '5',
-          newCommentsEnabled: true,
-          newCommentsThreshold: '15',
-          includeCommentsInEmail: true,
           eventReminderEnabled: true,
           reminderDaysBefore: '1,2',
-          lastPhotoCount: '0',
-          lastCommentCount: '0',
           lastAttendeeCount: '0'
         };
         return res.json(defaultSettings);
@@ -2109,16 +2102,6 @@ Generado desde la galería de eventos
       let subject = '';
 
       switch (notificationType) {
-        case 'newPhotos':
-          notificationData = {
-            eventTitle: event.title,
-            photoCount: 30,
-            eventUrl: `https://rocky.mx/evento/${event.ownerId}`,
-            organizerName: event.ownerId
-          };
-          subject = '📸 Nuevas fotos agregadas';
-          break;
-
         case 'attendeeConfirmation':
           notificationData = {
             eventTitle: event.title,
@@ -2131,21 +2114,6 @@ Generado desde la galería de eventos
             qrCode: 'TEST12345'
           };
           subject = '👥 Nueva confirmación de asistencia';
-          break;
-
-        case 'newComments':
-          notificationData = {
-            eventTitle: event.title,
-            commentCount: 15,
-            recentComments: [
-              { userName: 'Ana', comment: '¡Qué bonitas fotos!' },
-              { userName: 'Carlos', comment: 'Excelente evento, muchas gracias' },
-              { userName: 'María', comment: 'Me encantó la decoración' }
-            ],
-            eventUrl: `https://rocky.mx/evento/${event.ownerId}`,
-            organizerName: event.ownerId
-          };
-          subject = '💬 Nuevos comentarios en fotos';
           break;
 
         case 'eventReminder':
@@ -2207,13 +2175,9 @@ Generado desde la galería de eventos
         // Devolver configuración por defecto si no existe
         console.log('🎛️ NO GLOBAL SETTINGS FOUND - returning defaults');
         const defaultSettings = {
-          newPhotosNotificationEnabled: true,
           attendeeConfirmationsEnabled: true,
-          commentsNotificationEnabled: true,
           eventRemindersEnabled: true,
-          defaultNewPhotosEnabled: true,
           defaultAttendeeConfirmationsEnabled: true,
-          defaultCommentsEnabled: true,
           defaultEventRemindersEnabled: true
         };
         return res.json(defaultSettings);
@@ -2259,13 +2223,9 @@ Generado desde la galería de eventos
       const createTableSQL = `
         CREATE TABLE IF NOT EXISTS global_feature_settings (
           id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-          new_photos_notification_enabled boolean DEFAULT true NOT NULL,
           attendee_confirmations_enabled boolean DEFAULT true NOT NULL,
-          comments_notification_enabled boolean DEFAULT true NOT NULL,
           event_reminders_enabled boolean DEFAULT true NOT NULL,
-          default_new_photos_enabled boolean DEFAULT true NOT NULL,
           default_attendee_confirmations_enabled boolean DEFAULT true NOT NULL,
-          default_comments_enabled boolean DEFAULT true NOT NULL,
           default_event_reminders_enabled boolean DEFAULT true NOT NULL,
           created_at timestamp DEFAULT now() NOT NULL,
           updated_at timestamp DEFAULT now() NOT NULL
