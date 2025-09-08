@@ -374,7 +374,7 @@ export default function EventSettings() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="basico" className="flex items-center space-x-2">
             <User className="w-4 h-4" />
             <span>Básico</span>
@@ -390,10 +390,6 @@ export default function EventSettings() {
           <TabsTrigger value="asistencia" className="flex items-center space-x-2">
             <UserCheck className="w-4 h-4" />
             <span>Asistencia</span>
-          </TabsTrigger>
-          <TabsTrigger value="notificaciones" className="flex items-center space-x-2">
-            <Bell className="w-4 h-4" />
-            <span>Notificaciones</span>
           </TabsTrigger>
         </TabsList>
 
@@ -1005,10 +1001,6 @@ export default function EventSettings() {
           </Card>
         </TabsContent>
 
-        {/* Pestaña Notificaciones */}
-        <TabsContent value="notificaciones">
-          <EventNotificationsSettings eventId={personalEvent?.id} />
-        </TabsContent>
       </Tabs>
 
       {/* QR Scanner Modal */}
