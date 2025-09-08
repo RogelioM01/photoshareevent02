@@ -39,9 +39,15 @@ export default function AdminGlobalFeatures() {
   // Update local settings when data changes
   useEffect(() => {
     if (settings) {
+      console.log('🔧 SUPERADMIN: Received settings from API:', settings);
       setLocalSettings(settings);
     }
   }, [settings]);
+
+  // Force refresh every time the component mounts
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["/api/global-features"] });
+  }, []);
 
   // Save settings mutation
   const saveSettingsMutation = useMutation({
@@ -87,6 +93,8 @@ export default function AdminGlobalFeatures() {
     defaultAttendeeConfirmationsThreshold: 10,
     defaultReminderDaysBefore: "3"
   };
+
+  console.log('🔧 SUPERADMIN: Current settings for rendering:', currentSettings);
 
   const handleSettingChange = (key: keyof GlobalFeatureSettings, value: boolean | number | string) => {
     console.log(`🔧 SUPERADMIN: Changing ${key} to:`, value);
