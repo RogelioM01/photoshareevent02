@@ -273,7 +273,8 @@ export default function EventSettings() {
         timezone: formData.timezone,
         eventPlace: formData.eventPlace || undefined, // Explicit undefined for empty values
         eventAddress: formData.eventAddress || undefined, // Explicit undefined for empty values
-        enableAutoRedirect: formData.enableAutoRedirect
+        enableAutoRedirect: formData.enableAutoRedirect,
+        maxCompanions: formData.maxCompanions // Add maxCompanions to save
       };
       
       console.log('📤 SENDING TO SERVER:', completeUpdate);
@@ -865,7 +866,7 @@ export default function EventSettings() {
                       type="number"
                       min="0"
                       max="10"
-                      value={formData.maxCompanions || "2"}
+                      value={formData.maxCompanions || "5"}
                       onChange={(e) => {
                         setFormData(prev => ({ ...prev, maxCompanions: e.target.value }));
                       }}
