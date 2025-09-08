@@ -1026,7 +1026,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (userParam.endsWith('-album')) {
         username = userParam.replace('-album', '');
       }
-      const { title, description, coverImageUrl, backgroundType, backgroundValue, eventDate, eventTime, timezone, eventPlace, eventAddress, enableAutoRedirect } = req.body;
+      const { title, description, coverImageUrl, backgroundType, backgroundValue, eventDate, eventTime, timezone, eventPlace, eventAddress, enableAutoRedirect, maxCompanions } = req.body;
       
       // Find the user
       const user = await storage.getUserByUsername(username);
@@ -1060,7 +1060,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timezone: timezone !== undefined ? timezone : event.timezone,
         eventPlace: eventPlace !== undefined ? eventPlace : event.eventPlace,
         eventAddress: eventAddress !== undefined ? eventAddress : event.eventAddress,
-        enableAutoRedirect: enableAutoRedirect !== undefined ? enableAutoRedirect : (event.enableAutoRedirect || false)
+        enableAutoRedirect: enableAutoRedirect !== undefined ? enableAutoRedirect : (event.enableAutoRedirect || false),
+        maxCompanions: maxCompanions !== undefined ? maxCompanions : event.maxCompanions
       });
       
       console.log('✅ SERVER UPDATE: Event updated successfully:', {
