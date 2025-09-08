@@ -108,22 +108,13 @@ export const eventNotificationSettings = pgTable("event_notification_settings", 
   adminEmail: text("admin_email").notNull(),
   
   // Configuración de notificaciones granulares
-  newPhotosEnabled: boolean("new_photos_enabled").default(true).notNull(),
-  newPhotosThreshold: integer("new_photos_threshold").default(30).notNull(), // Cada X fotos subidas
-  
   attendeeConfirmationsEnabled: boolean("attendee_confirmations_enabled").default(true).notNull(),
   attendeeConfirmationsThreshold: integer("attendee_confirmations_threshold").default(5).notNull(), // Cada X confirmaciones (5/10/20)
-  
-  newCommentsEnabled: boolean("new_comments_enabled").default(true).notNull(),
-  newCommentsThreshold: integer("new_comments_threshold").default(15).notNull(), // Cada X comentarios
-  includeCommentsInEmail: boolean("include_comments_in_email").default(true).notNull(),
   
   eventReminderEnabled: boolean("event_reminder_enabled").default(true).notNull(),
   reminderDaysBefore: text("reminder_days_before").default("1,2").notNull(), // Días antes del evento (separados por coma)
   
   // Contadores para tracking de umbrales
-  lastPhotoCount: integer("last_photo_count").default(0).notNull(),
-  lastCommentCount: integer("last_comment_count").default(0).notNull(),
   lastAttendeeCount: integer("last_attendee_count").default(0).notNull(), // Conteo de confirmaciones para tracking de umbrales
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -147,15 +138,11 @@ export const globalFeatureSettings = pgTable("global_feature_settings", {
   id: uuid("id").primaryKey().defaultRandom(),
   
   // Control de características visibles en event admin dashboard
-  newPhotosNotificationEnabled: boolean("new_photos_notification_enabled").default(true).notNull(),
   attendeeConfirmationsEnabled: boolean("attendee_confirmations_enabled").default(true).notNull(),
-  commentsNotificationEnabled: boolean("comments_notification_enabled").default(true).notNull(),
   eventRemindersEnabled: boolean("event_reminders_enabled").default(true).notNull(),
   
   // Valores por defecto para nuevos eventos
-  defaultNewPhotosEnabled: boolean("default_new_photos_enabled").default(true).notNull(),
   defaultAttendeeConfirmationsEnabled: boolean("default_attendee_confirmations_enabled").default(true).notNull(),
-  defaultCommentsEnabled: boolean("default_comments_enabled").default(true).notNull(),
   defaultEventRemindersEnabled: boolean("default_event_reminders_enabled").default(true).notNull(),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
