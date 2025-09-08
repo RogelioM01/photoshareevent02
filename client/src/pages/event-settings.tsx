@@ -207,13 +207,14 @@ export default function EventSettings() {
       timezone: personalEvent.timezone || "America/Mexico_City", // Loaded from Supabase
       eventPlace: personalEvent.eventPlace ?? "", // Loaded from Supabase
       eventAddress: personalEvent.eventAddress ?? "", // Loaded from Supabase
-      enableAutoRedirect: personalEvent.enableAutoRedirect || false // Loaded from Supabase
+      enableAutoRedirect: personalEvent.enableAutoRedirect || false, // Loaded from Supabase
+      maxCompanions: personalEvent.maxCompanions || "5" // Loaded from Supabase
     };
 
     console.log('✅ DATABASE: Loading all settings from Supabase:', eventData);
     
     return eventData;
-  }, [personalEvent?.id, personalEvent?.title, personalEvent?.description, personalEvent?.coverImageUrl, personalEvent?.backgroundType, personalEvent?.backgroundValue, personalEvent?.eventPlace, personalEvent?.eventAddress, personalEvent?.eventDate, personalEvent?.eventTime, personalEvent?.timezone, personalEvent?.enableAutoRedirect, currentUser?.username]);
+  }, [personalEvent?.id, personalEvent?.title, personalEvent?.description, personalEvent?.coverImageUrl, personalEvent?.backgroundType, personalEvent?.backgroundValue, personalEvent?.eventPlace, personalEvent?.eventAddress, personalEvent?.eventDate, personalEvent?.eventTime, personalEvent?.timezone, personalEvent?.enableAutoRedirect, personalEvent?.maxCompanions, currentUser?.username]);
 
   // FORM DATA SYNCHRONIZATION: Update form state when computed data changes
   //
@@ -866,7 +867,7 @@ export default function EventSettings() {
                       type="number"
                       min="0"
                       max="10"
-                      value={formData.maxCompanions || "5"}
+                      value={formData.maxCompanions}
                       onChange={(e) => {
                         setFormData(prev => ({ ...prev, maxCompanions: e.target.value }));
                       }}
