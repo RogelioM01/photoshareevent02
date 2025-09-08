@@ -2193,6 +2193,61 @@ Generado desde la galería de eventos
   });
 
   // =============================================================================
+  // GLOBAL FEATURE SETTINGS SYSTEM - Control de características para Event Admins
+  // =============================================================================
+
+  // Obtener configuración global de características
+  app.get('/api/global-features', async (req, res) => {
+    try {
+      console.log('🎛️ FETCHING global feature settings');
+
+      const settings = await storage.getGlobalFeatureSettings();
+
+      if (!settings) {
+        // Devolver configuración por defecto si no existe
+        console.log('🎛️ NO GLOBAL SETTINGS FOUND - returning defaults');
+        const defaultSettings = {
+          newPhotosNotificationEnabled: true,
+          attendeeConfirmationsEnabled: true,
+          commentsNotificationEnabled: true,
+          eventRemindersEnabled: true,
+          defaultNewPhotosEnabled: true,
+          defaultAttendeeConfirmationsEnabled: true,
+          defaultCommentsEnabled: true,
+          defaultEventRemindersEnabled: true
+        };
+        return res.json(defaultSettings);
+      }
+
+      console.log('🎛️ FOUND global feature settings');
+      res.json(settings);
+    } catch (error) {
+      console.error('Error fetching global feature settings:', error);
+      res.status(500).json({ error: 'Error al obtener configuración global de características' });
+    }
+  });
+
+  // Guardar o actualizar configuración global de características
+  app.post('/api/global-features', async (req, res) => {
+    try {
+      const settingsData = req.body;
+      
+      console.log('🎛️ SAVING global feature settings', settingsData);
+
+      const updatedSettings = await storage.updateGlobalFeatureSettings(settingsData);
+
+      console.log('🎛️ GLOBAL feature settings saved successfully');
+      res.json({ success: true, settings: updatedSettings });
+    } catch (error) {
+      console.error('Error saving global feature settings:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Error al guardar configuración global de características' 
+      });
+    }
+  });
+
+  // =============================================================================
   // BRANDED LINKS SYSTEM - URL Shortener APIs
   // =============================================================================
 
