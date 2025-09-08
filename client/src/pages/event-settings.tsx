@@ -604,7 +604,7 @@ export default function EventSettings() {
                   </div>
                 </div>
 
-                <div>
+                <div className="hidden">
                   <Label>Imagen de Perfil</Label>
                   <div className="space-y-4">
                     {formData.coverImageUrl && (
