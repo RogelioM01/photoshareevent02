@@ -565,6 +565,7 @@ export class DatabaseStorage implements IStorage {
         eventId: textPosts.eventId,
         userId: textPosts.userId,
         content: textPosts.content,
+        backgroundGradient: textPosts.backgroundGradient,
         createdAt: textPosts.createdAt,
         userName: eventUsers.name, // This will be null for guest users
       }).from(textPosts)

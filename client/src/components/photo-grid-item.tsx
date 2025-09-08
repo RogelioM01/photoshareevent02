@@ -29,6 +29,7 @@ interface ContentItem {
   fileSize?: string;
   isVideo?: boolean;
   content?: string;
+  backgroundGradient?: string;
   likeCount?: number;
   isLikedByCurrentUser?: boolean;
   commentCount?: number;
@@ -171,7 +172,7 @@ const PhotoGridItem = memo(function PhotoGridItem({
           </div>
         )
       ) : (
-        <div className="relative p-6 h-full flex flex-col justify-center text-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50">
+        <div className={`relative p-6 h-full flex flex-col justify-center text-center bg-gradient-to-br ${item.backgroundGradient || 'from-blue-50 via-purple-50 to-pink-50'} shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50`}>
           {/* Delete button - show for post owner or event owner */}
           {showDeleteButton && (
             <button
