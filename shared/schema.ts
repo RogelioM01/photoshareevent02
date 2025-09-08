@@ -109,10 +109,10 @@ export const eventNotificationSettings = pgTable("event_notification_settings", 
   
   // Configuración de notificaciones granulares
   attendeeConfirmationsEnabled: boolean("attendee_confirmations_enabled").default(true).notNull(),
-  attendeeConfirmationsThreshold: integer("attendee_confirmations_threshold").default(5).notNull(), // Cada X confirmaciones (5/10/20)
+  attendeeConfirmationsThreshold: integer("attendee_confirmations_threshold").default(10).notNull(), // Cada X confirmaciones (5/10/20)
   
   eventReminderEnabled: boolean("event_reminder_enabled").default(true).notNull(),
-  reminderDaysBefore: text("reminder_days_before").default("1,2").notNull(), // Días antes del evento (separados por coma)
+  reminderDaysBefore: text("reminder_days_before").default("3").notNull(), // Días antes del evento (separados por coma)
   
   // Contadores para tracking de umbrales
   lastAttendeeCount: integer("last_attendee_count").default(0).notNull(), // Conteo de confirmaciones para tracking de umbrales

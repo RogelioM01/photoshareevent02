@@ -40,9 +40,9 @@ export default function EventNotificationsSettings({ eventId }: EventNotificatio
   const [settings, setSettings] = useState<EventNotificationSettings>({
     adminEmail: '',
     attendeeConfirmationsEnabled: true,
-    attendeeConfirmationsThreshold: '5',
+    attendeeConfirmationsThreshold: '10',
     eventReminderEnabled: true,
-    reminderDaysBefore: '1,2'
+    reminderDaysBefore: '3'
   });
 
   // Fetch existing notification settings
@@ -302,8 +302,8 @@ export default function EventNotificationsSettings({ eventId }: EventNotificatio
                         <SelectContent>
                           <SelectItem value="1">1 día antes</SelectItem>
                           <SelectItem value="2">2 días antes</SelectItem>
-                          <SelectItem value="1,2">1 y 2 días antes</SelectItem>
-                          <SelectItem value="1,3">1 y 3 días antes</SelectItem>
+                          <SelectItem value="3">3 días antes</SelectItem>
+                          <SelectItem value="5">5 días antes</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
