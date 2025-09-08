@@ -705,7 +705,7 @@ export default function EventSettings() {
                 
                 <div className="flex justify-center pt-4 border-t border-blue-200">
                   <Button 
-                    onClick={downloadZip}
+                    onClick={() => downloadZip()}
                     disabled={isDownloadingZip}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
                     size="lg"
@@ -1028,7 +1028,6 @@ export default function EventSettings() {
             <div className="p-4">
               <QRScanner 
                 eventId={personalEvent.id}
-                eventTitle={personalEvent.title}
               />
             </div>
           </div>
