@@ -17,6 +17,7 @@ import { apiRequest, queryClient } from '@/lib/queryClient';
 
 interface EmailNotificationSettings {
   attendanceConfirmation: boolean;
+  eventReminders: boolean;
 }
 
 interface EmailSystemStatus {
@@ -46,7 +47,8 @@ export default function AdminEmailConfig() {
 
   // Configuración por defecto de notificaciones
   const [notifications, setNotifications] = useState<EmailNotificationSettings>({
-    attendanceConfirmation: true
+    attendanceConfirmation: true,
+    eventReminders: true
   });
 
   // Fetch email configuration con datos reales del sistema
@@ -140,7 +142,7 @@ export default function AdminEmailConfig() {
     });
   };
 
-  const updateNotification = (key: keyof EmailNotificationSettings, value: boolean | number) => {
+  const updateNotification = (key: keyof EmailNotificationSettings, value: boolean) => {
     setNotifications(prev => ({ ...prev, [key]: value }));
   };
 
@@ -220,8 +222,22 @@ export default function AdminEmailConfig() {
                 />
               </div>
 
-
-
+              {/* Recordatorios de Evento */}
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Recordatorios de Evento
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Enviar recordatorio antes del evento a los asistentes
+                  </p>
+                </div>
+                <Switch
+                  checked={notifications.eventReminders}
+                  onCheckedChange={(checked) => updateNotification('eventReminders', checked)}
+                />
+              </div>
             </div>
 
             <Separator />
