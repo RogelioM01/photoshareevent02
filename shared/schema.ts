@@ -26,7 +26,7 @@ export const events = pgTable("events", {
   eventPlace: text("event_place"), // Place type (e.g., "Casa", "Restaurante", "Parque") - optional for existing events
   eventAddress: text("event_address"), // Specific address or location details - optional for existing events
   enableAutoRedirect: boolean("enable_auto_redirect").default(false), // Auto-redirect to RSVP page before event date
-  maxCompanions: text("max_companions").default("2"), // Maximum companions allowed per attendee (configurable by organizer)
+  maxCompanions: text("max_companions").default("5"), // Maximum companions allowed per attendee (configurable by organizer)
   ownerId: text("owner_id").references(() => appUsers.id, { onDelete: "cascade" }), // CASCADE: Si se elimina el usuario, se eliminan sus eventos
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
