@@ -19,6 +19,7 @@ import AdminCheckin from "@/pages/admin-checkin";
 import EmailTest from "@/pages/email-test";
 import AdminEmailConfig from "@/pages/admin-email-config";
 import AdminLinks from "@/pages/admin-links";
+import AdminGlobalFeatures from "@/pages/admin-global-features";
 import DebugPage from "@/pages/debug";
 import NotFound from "@/pages/not-found";
 
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/admin" component={AdminPanel} />
       <Route path="/admin/email-config" component={AdminEmailConfig} />
       <Route path="/admin/links" component={AdminLinks} />
+      <Route path="/admin/global-features" component={AdminGlobalFeatures} />
       <Route path="/email-test" component={EmailTest} />
       <Route path="/debug" component={DebugPage} />
       <Route path="/evento/:username/registro" component={RegistroAsistencia} />

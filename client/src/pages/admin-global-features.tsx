@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -34,27 +34,38 @@ export default function AdminGlobalFeatures() {
   // Fetch current global feature settings
   const { data: settings, isLoading } = useQuery<GlobalFeatureSettings>({
     queryKey: ["/api/global-features"],
-    onSuccess: (data) => {
-      setLocalSettings(data);
-    }
   });
+
+  // Update local settings when data changes
+  useEffect(() => {
+    if (settings && !localSettings) {
+      setLocalSettings(settings);
+    }
+  }, [settings, localSettings]);
 
   // Save settings mutation
   const saveSettingsMutation = useMutation({
     mutationFn: async (settingsData: Partial<GlobalFeatureSettings>) => {
-      return await apiRequest("/api/global-features", {
+      const response = await fetch("/api/global-features", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settingsData),
       });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Error al guardar configuración');
+      }
+      return response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/global-features"] });
       toast({
         title: "✅ Configuración actualizada",
         description: "Los cambios se han guardado exitosamente",
       });
-      setLocalSettings(data.settings);
+      if (data.settings) {
+        setLocalSettings(data.settings);
+      }
     },
     onError: (error: any) => {
       toast({
