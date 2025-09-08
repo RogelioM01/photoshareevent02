@@ -14,13 +14,9 @@ import { apiRequest } from '@/lib/queryClient';
 
 interface GlobalFeatureSettings {
   id?: string;
-  newPhotosNotificationEnabled: boolean;
   attendeeConfirmationsEnabled: boolean;
-  commentsNotificationEnabled: boolean;
   eventRemindersEnabled: boolean;
-  defaultNewPhotosEnabled: boolean;
   defaultAttendeeConfirmationsEnabled: boolean;
-  defaultCommentsEnabled: boolean;
   defaultEventRemindersEnabled: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -77,13 +73,9 @@ export default function AdminGlobalFeatures() {
   });
 
   const currentSettings = localSettings || settings || {
-    newPhotosNotificationEnabled: true,
     attendeeConfirmationsEnabled: true,
-    commentsNotificationEnabled: true,
     eventRemindersEnabled: true,
-    defaultNewPhotosEnabled: true,
     defaultAttendeeConfirmationsEnabled: true,
-    defaultCommentsEnabled: true,
     defaultEventRemindersEnabled: true
   };
 
@@ -149,25 +141,6 @@ export default function AdminGlobalFeatures() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Notificaciones de Nuevas Fotos */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Camera className="w-5 h-5 text-blue-500" />
-                <div>
-                  <p className="font-medium">Notificaciones de Nuevas Fotos</p>
-                  <p className="text-sm text-muted-foreground">
-                    Permite configurar alertas cuando se suben fotos
-                  </p>
-                </div>
-              </div>
-              <Switch
-                checked={currentSettings.newPhotosNotificationEnabled}
-                onCheckedChange={(value) => handleSettingChange('newPhotosNotificationEnabled', value)}
-                data-testid="switch-new-photos"
-              />
-            </div>
-
-            <Separator />
 
             {/* Confirmaciones de Asistencia */}
             <div className="flex items-center justify-between">
@@ -189,25 +162,6 @@ export default function AdminGlobalFeatures() {
 
             <Separator />
 
-            {/* Notificaciones de Comentarios */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <MessageSquare className="w-5 h-5 text-purple-500" />
-                <div>
-                  <p className="font-medium">Notificaciones de Comentarios</p>
-                  <p className="text-sm text-muted-foreground">
-                    Alertas cuando se añaden comentarios a fotos
-                  </p>
-                </div>
-              </div>
-              <Switch
-                checked={currentSettings.commentsNotificationEnabled}
-                onCheckedChange={(value) => handleSettingChange('commentsNotificationEnabled', value)}
-                data-testid="switch-comments"
-              />
-            </div>
-
-            <Separator />
 
             {/* Recordatorios de Evento */}
             <div className="flex items-center justify-between">
@@ -241,26 +195,6 @@ export default function AdminGlobalFeatures() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Default Nuevas Fotos */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Camera className="w-5 h-5 text-blue-500" />
-                <div>
-                  <p className="font-medium">Nuevas Fotos (por defecto)</p>
-                  <p className="text-sm text-muted-foreground">
-                    Activo en nuevos eventos por defecto
-                  </p>
-                </div>
-              </div>
-              <Switch
-                checked={currentSettings.defaultNewPhotosEnabled}
-                onCheckedChange={(value) => handleSettingChange('defaultNewPhotosEnabled', value)}
-                disabled={!currentSettings.newPhotosNotificationEnabled}
-                data-testid="switch-default-new-photos"
-              />
-            </div>
-
-            <Separator />
 
             {/* Default Confirmaciones */}
             <div className="flex items-center justify-between">
@@ -283,26 +217,6 @@ export default function AdminGlobalFeatures() {
 
             <Separator />
 
-            {/* Default Comentarios */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <MessageSquare className="w-5 h-5 text-purple-500" />
-                <div>
-                  <p className="font-medium">Comentarios (por defecto)</p>
-                  <p className="text-sm text-muted-foreground">
-                    Activo en nuevos eventos por defecto
-                  </p>
-                </div>
-              </div>
-              <Switch
-                checked={currentSettings.defaultCommentsEnabled}
-                onCheckedChange={(value) => handleSettingChange('defaultCommentsEnabled', value)}
-                disabled={!currentSettings.commentsNotificationEnabled}
-                data-testid="switch-default-comments"
-              />
-            </div>
-
-            <Separator />
 
             {/* Default Recordatorios */}
             <div className="flex items-center justify-between">
@@ -380,24 +294,12 @@ export default function AdminGlobalFeatures() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <Badge variant={currentSettings.newPhotosNotificationEnabled ? "default" : "secondary"}>
-                {currentSettings.newPhotosNotificationEnabled ? "Activo" : "Inactivo"}
-              </Badge>
-              <p className="text-sm text-muted-foreground mt-1">Fotos</p>
-            </div>
+          <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <Badge variant={currentSettings.attendeeConfirmationsEnabled ? "default" : "secondary"}>
                 {currentSettings.attendeeConfirmationsEnabled ? "Activo" : "Inactivo"}
               </Badge>
               <p className="text-sm text-muted-foreground mt-1">Asistencias</p>
-            </div>
-            <div className="text-center">
-              <Badge variant={currentSettings.commentsNotificationEnabled ? "default" : "secondary"}>
-                {currentSettings.commentsNotificationEnabled ? "Activo" : "Inactivo"}
-              </Badge>
-              <p className="text-sm text-muted-foreground mt-1">Comentarios</p>
             </div>
             <div className="text-center">
               <Badge variant={currentSettings.eventRemindersEnabled ? "default" : "secondary"}>
