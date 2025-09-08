@@ -268,11 +268,11 @@ export default function EventSettings() {
         coverImageUrl: formData.coverImageUrl,
         backgroundType: formData.backgroundType,
         backgroundValue: formData.backgroundValue,
-        eventDate: formData.eventDate || null, // Explicit null for empty values
-        eventTime: formData.eventTime || null, // Explicit null for empty values
+        eventDate: formData.eventDate || undefined, // Explicit undefined for empty values
+        eventTime: formData.eventTime || undefined, // Explicit undefined for empty values
         timezone: formData.timezone,
-        eventPlace: formData.eventPlace || null, // Explicit null for empty values
-        eventAddress: formData.eventAddress || null, // Explicit null for empty values
+        eventPlace: formData.eventPlace || undefined, // Explicit undefined for empty values
+        eventAddress: formData.eventAddress || undefined, // Explicit undefined for empty values
         enableAutoRedirect: formData.enableAutoRedirect
       };
       
@@ -359,7 +359,6 @@ export default function EventSettings() {
                 e.stopPropagation();
                 setIsQRModalOpen(true);
               }}
-              title="Generar código QR"
             />
             <div className="flex-1">
               <div className="flex items-center justify-between">
