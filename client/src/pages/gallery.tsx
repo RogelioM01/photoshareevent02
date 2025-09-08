@@ -373,12 +373,15 @@ export default function Gallery() {
               {event.title}
             </h1>
 
-            <Button 
-              onClick={() => setShowUploadModal(true)}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-full text-lg font-medium shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
-            >
-              Agregar fotos
-            </Button>
+            {/* Only show upload button if user is active or is a guest */}
+            {(!authUser || authUser.isActive) && (
+              <Button 
+                onClick={() => setShowUploadModal(true)}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-full text-lg font-medium shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
+              >
+                Agregar fotos
+              </Button>
+            )}
 
             {isEventOwner && (
               <div className="mt-4 flex items-center justify-center">
@@ -466,17 +469,19 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* Floating Action Button - Mejorado con clases CSS */}
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="fab-upload-button"
-          data-testid="fab-upload-button"
-          aria-label="Subir fotos y videos"
-        >
-          <Camera className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
-          <span className="absolute inset-0 rounded-full bg-white opacity-0 group-active:opacity-20 transition-opacity duration-150 md:hidden"></span>
-          <span className="absolute inset-0 rounded-full border-2 border-white opacity-0 group-hover:opacity-30 scale-100 group-hover:scale-110 transition-all duration-300 hidden md:block"></span>
-        </button>
+        {/* Floating Action Button - Only show if user is active or is a guest */}
+        {(!authUser || authUser.isActive) && (
+          <button
+            onClick={() => setShowUploadModal(true)}
+            className="fab-upload-button"
+            data-testid="fab-upload-button"
+            aria-label="Subir fotos y videos"
+          >
+            <Camera className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
+            <span className="absolute inset-0 rounded-full bg-white opacity-0 group-active:opacity-20 transition-opacity duration-150 md:hidden"></span>
+            <span className="absolute inset-0 rounded-full border-2 border-white opacity-0 group-hover:opacity-30 scale-100 group-hover:scale-110 transition-all duration-300 hidden md:block"></span>
+          </button>
+        )}
       </main>
 
       {/* Upload Modal */}
