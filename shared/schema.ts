@@ -142,6 +142,25 @@ export const brandedLinks = pgTable("branded_links", {
   lastClickedAt: timestamp("last_clicked_at"), // Timestamp del último click (nullable)
 });
 
+// Global Feature Settings - Control de características para Event Admins desde Superadmin
+export const globalFeatureSettings = pgTable("global_feature_settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  
+  // Control de características visibles en event admin dashboard
+  newPhotosNotificationEnabled: boolean("new_photos_notification_enabled").default(true).notNull(),
+  attendeeConfirmationsEnabled: boolean("attendee_confirmations_enabled").default(true).notNull(),
+  commentsNotificationEnabled: boolean("comments_notification_enabled").default(true).notNull(),
+  eventRemindersEnabled: boolean("event_reminders_enabled").default(true).notNull(),
+  
+  // Valores por defecto para nuevos eventos
+  defaultNewPhotosThreshold: integer("default_new_photos_threshold").default(30).notNull(),
+  defaultAttendeeThreshold: integer("default_attendee_threshold").default(5).notNull(),
+  defaultCommentsThreshold: integer("default_comments_threshold").default(15).notNull(),
+  defaultReminderDays: text("default_reminder_days").default("1,2").notNull(),
+  
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const insertEventSchema = createInsertSchema(events).omit({
   id: true,
   createdAt: true,
@@ -207,6 +226,11 @@ export const insertEventNotificationSettingsSchema = createInsertSchema(eventNot
   updatedAt: true,
 });
 
+export const insertGlobalFeatureSettingsSchema = createInsertSchema(globalFeatureSettings).omit({
+  id: true,
+  updatedAt: true,
+});
+
 export type Event = typeof events.$inferSelect;
 export type EventUser = typeof eventUsers.$inferSelect;
 export type Photo = typeof photos.$inferSelect;
@@ -217,6 +241,7 @@ export type EventAttendee = typeof eventAttendees.$inferSelect;
 export type User = typeof appUsers.$inferSelect;
 export type EventNotificationSettings = typeof eventNotificationSettings.$inferSelect;
 export type BrandedLink = typeof brandedLinks.$inferSelect;
+export type GlobalFeatureSettings = typeof globalFeatureSettings.$inferSelect;
 
 export type InsertEvent = z.infer<typeof insertEventSchema>;
 export type InsertEventUser = z.infer<typeof insertEventUserSchema>;
@@ -228,6 +253,7 @@ export type InsertEventAttendee = z.infer<typeof insertEventAttendeeSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type InsertEventNotificationSettings = z.infer<typeof insertEventNotificationSettingsSchema>;
 export type InsertBrandedLink = z.infer<typeof insertBrandedLinkSchema>;
+export type InsertGlobalFeatureSettings = z.infer<typeof insertGlobalFeatureSettingsSchema>;
 
 // Extended types with user information
 export type PhotoWithUser = Photo & { userName: string };
