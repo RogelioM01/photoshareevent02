@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { events, eventUsers, photos, textPosts, photoLikes, photoComments, eventAttendees, eventNotificationSettings, brandedLinks, appUsers, type Event, type EventUser, type Photo, type TextPost, type PhotoLike, type PhotoComment, type EventAttendee, type User, type BrandedLink, type PhotoWithUser, type PhotoWithUserAndLikes, type TextPostWithUser, type EventAttendeeWithUser, type AttendeeStats, type PhotoCommentWithUser, type InsertEvent, type InsertEventUser, type InsertPhoto, type InsertTextPost, type InsertPhotoLike, type InsertPhotoComment, type InsertEventAttendee, type InsertUser, type InsertBrandedLink } from "../shared/schema.js";
+import { events, eventUsers, photos, textPosts, photoLikes, photoComments, eventAttendees, eventNotificationSettings, brandedLinks, globalFeatureSettings, appUsers, type Event, type EventUser, type Photo, type TextPost, type PhotoLike, type PhotoComment, type EventAttendee, type User, type BrandedLink, type GlobalFeatureSettings, type PhotoWithUser, type PhotoWithUserAndLikes, type TextPostWithUser, type EventAttendeeWithUser, type AttendeeStats, type PhotoCommentWithUser, type InsertEvent, type InsertEventUser, type InsertPhoto, type InsertTextPost, type InsertPhotoLike, type InsertPhotoComment, type InsertEventAttendee, type InsertUser, type InsertBrandedLink, type InsertGlobalFeatureSettings } from "../shared/schema.js";
 import { eq, desc, and, sql } from "drizzle-orm";
 
 // HYBRID DATABASE ARCHITECTURE: Coolify PostgreSQL (Production) + Replit Local PostgreSQL (Development)
@@ -1461,6 +1461,46 @@ export class DatabaseStorage implements IStorage {
           lastClickedAt: new Date()
         })
         .where(eq(brandedLinks.shortCode, shortCode));
+    });
+  }
+
+  // ============================================================================= 
+  // GLOBAL FEATURE SETTINGS SYSTEM - Control de características para Event Admins
+  // =============================================================================
+
+  async getGlobalFeatureSettings(): Promise<GlobalFeatureSettings | null> {
+    return await executeDbOperation(async (db) => {
+      const result = await db.select()
+        .from(globalFeatureSettings)
+        .limit(1);
+      return result[0] || null;
+    });
+  }
+
+  async updateGlobalFeatureSettings(settings: Partial<InsertGlobalFeatureSettings>): Promise<GlobalFeatureSettings> {
+    return await executeDbOperation(async (db) => {
+      // Verificar si ya existe configuración
+      const [existing] = await db.select()
+        .from(globalFeatureSettings)
+        .limit(1);
+
+      if (existing) {
+        // Actualizar configuración existente
+        const [updated] = await db.update(globalFeatureSettings)
+          .set({
+            ...settings,
+            updatedAt: new Date()
+          })
+          .where(eq(globalFeatureSettings.id, existing.id))
+          .returning();
+        return updated;
+      } else {
+        // Crear nueva configuración
+        const [created] = await db.insert(globalFeatureSettings)
+          .values(settings)
+          .returning();
+        return created;
+      }
     });
   }
 }
