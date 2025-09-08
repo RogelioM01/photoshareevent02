@@ -39,6 +39,7 @@ Preferred communication style: Simple, everyday language.
 - **Guest Name Display**: Intelligent name extraction system that converts guest IDs like `guest-maria-rodriguez-1757234276920` to clean display names like "Maria Rodriguez", automatically filtering out timestamps while preserving multi-word names.
 - **Separated Registration Routes**: Clear distinction between guest registration form (`/evento/:username/registro`) and admin check-in scanner (`/evento/:username/checkin`).
 - **Email Service Integration**: Dual Emailit-only system with intelligent failover (Emailit.com REST API primary, Emailit SMTP secondary) for automated event notifications (registration, check-in reminders, new photos, administrator attendee notifications) using HTML templates.
+- **Global Feature Control System**: Superadmin can configure default global settings for "Confirmaciones de Asistencia" and "Recordatorios de Eventos" that apply to all events, with individual event admin customization capabilities.
 - **Location System**: `eventPlace` and `eventAddress` fields for event location details with flexible text input.
 - **Stable Local Storage**: Simplified storage architecture using local file system with automatic error handling and recovery.
 - **Photo Comments System**: Complete commenting functionality with `photo_comments` table, API routes for CRUD, and responsive modal interface with real-time updates and Spanish timestamps.

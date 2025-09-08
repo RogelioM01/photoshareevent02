@@ -17,7 +17,6 @@ import EventoPersonal from "@/pages/evento-personal";
 import RegistroAsistencia from "@/pages/registro-asistencia";
 import AdminCheckin from "@/pages/admin-checkin";
 import EmailTest from "@/pages/email-test";
-import AdminEmailConfig from "@/pages/admin-email-config";
 import AdminLinks from "@/pages/admin-links";
 import AdminGlobalFeatures from "@/pages/admin-global-features";
 import DebugPage from "@/pages/debug";
@@ -32,7 +31,6 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={EventSettings} />
       <Route path="/admin" component={AdminPanel} />
-      <Route path="/admin/email-config" component={AdminEmailConfig} />
       <Route path="/admin/links" component={AdminLinks} />
       <Route path="/admin/global-features" component={AdminGlobalFeatures} />
       <Route path="/email-test" component={EmailTest} />

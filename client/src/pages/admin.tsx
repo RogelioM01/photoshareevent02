@@ -287,12 +287,6 @@ export default function AdminPanel() {
               Agregar Usuario
             </Button>
             <Button
-              onClick={() => setLocation("/admin/email-config")}
-              variant="secondary"
-            >
-              Configurar Emails
-            </Button>
-            <Button
               onClick={() => setLocation("/admin/global-features")}
               variant="outline"
               className="border-purple-600 text-purple-600 hover:bg-purple-50"
