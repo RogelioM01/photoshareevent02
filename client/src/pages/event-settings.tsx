@@ -1028,6 +1028,7 @@ export default function EventSettings() {
             <div className="p-4">
               <QRScanner 
                 eventId={personalEvent.id}
+                onScanSuccess={() => {}}
               />
             </div>
           </div>
