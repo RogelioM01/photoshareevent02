@@ -15,26 +15,17 @@ import { Bell, Camera, Users, MessageSquare, Clock, Mail, Zap, CheckCircle, Aler
 
 interface EventNotificationSettings {
   adminEmail: string;
-  newPhotosEnabled: boolean;
-  newPhotosThreshold: string;
   attendeeConfirmationsEnabled: boolean;
   attendeeConfirmationsThreshold: string;
-  newCommentsEnabled: boolean;
-  newCommentsThreshold: string;
-  includeCommentsInEmail: boolean;
   eventReminderEnabled: boolean;
   reminderDaysBefore: string;
 }
 
 interface GlobalFeatureSettings {
   id?: string;
-  newPhotosNotificationEnabled: boolean;
   attendeeConfirmationsEnabled: boolean;
-  commentsNotificationEnabled: boolean;
   eventRemindersEnabled: boolean;
-  defaultNewPhotosEnabled: boolean;
   defaultAttendeeConfirmationsEnabled: boolean;
-  defaultCommentsEnabled: boolean;
   defaultEventRemindersEnabled: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -48,13 +39,8 @@ export default function EventNotificationsSettings({ eventId }: EventNotificatio
   const { toast } = useToast();
   const [settings, setSettings] = useState<EventNotificationSettings>({
     adminEmail: '',
-    newPhotosEnabled: true,
-    newPhotosThreshold: '30',
     attendeeConfirmationsEnabled: true,
     attendeeConfirmationsThreshold: '5',
-    newCommentsEnabled: true,
-    newCommentsThreshold: '15',
-    includeCommentsInEmail: true,
     eventReminderEnabled: true,
     reminderDaysBefore: '1,2'
   });
@@ -78,9 +64,7 @@ export default function EventNotificationsSettings({ eventId }: EventNotificatio
       // Apply global defaults for new events
       setSettings(prev => ({
         ...prev,
-        newPhotosEnabled: globalFeatures.defaultNewPhotosEnabled,
         attendeeConfirmationsEnabled: globalFeatures.defaultAttendeeConfirmationsEnabled,
-        newCommentsEnabled: globalFeatures.defaultCommentsEnabled,
         eventReminderEnabled: globalFeatures.defaultEventRemindersEnabled,
       }));
     }
@@ -220,69 +204,6 @@ export default function EventNotificationsSettings({ eventId }: EventNotificatio
 
           <Separator />
 
-          {/* Notificaciones de Fotos - Solo mostrar si está habilitado globalmente */}
-          {globalFeatures?.newPhotosNotificationEnabled ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Camera className="w-5 h-5 text-blue-500" />
-                  <div>
-                    <Label className="text-base font-semibold">Notificaciones de Nuevas Fotos</Label>
-                    <p className="text-sm text-gray-600">Recibir email cuando se suban nuevas fotos a la galería</p>
-                  </div>
-                </div>
-                <Switch
-                  checked={settings.newPhotosEnabled}
-                  onCheckedChange={(checked) => updateSetting('newPhotosEnabled', checked)}
-                  className="data-[state=checked]:bg-green-600"
-                />
-              </div>
-              
-              {settings.newPhotosEnabled && (
-                <div className="ml-7 space-y-2">
-                  <Label className="text-sm font-medium">Notificar cada:</Label>
-                  <Select 
-                    value={settings.newPhotosThreshold}
-                    onValueChange={(value) => updateSetting('newPhotosThreshold', value)}
-                  >
-                    <SelectTrigger className="w-40">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="10">10 fotos</SelectItem>
-                      <SelectItem value="20">20 fotos</SelectItem>
-                      <SelectItem value="30">30 fotos</SelectItem>
-                      <SelectItem value="50">50 fotos</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleTestNotification('newPhotos')}
-                    disabled={testNotificationMutation.isPending}
-                    className="ml-2"
-                  >
-                    <Mail className="w-4 h-4 mr-1" />
-                    Probar
-                  </Button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between opacity-50">
-                <div className="flex items-center space-x-2">
-                  <EyeOff className="w-5 h-5 text-gray-400" />
-                  <div>
-                    <Label className="text-base font-semibold text-gray-400">Notificaciones de Nuevas Fotos</Label>
-                    <p className="text-sm text-gray-400">Esta función está deshabilitada por el superadministrador</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <Separator />
 
           {/* Notificaciones de Confirmaciones - Solo mostrar si está habilitado globalmente */}
           {globalFeatures?.attendeeConfirmationsEnabled ? (
@@ -347,81 +268,6 @@ export default function EventNotificationsSettings({ eventId }: EventNotificatio
 
           <Separator />
 
-          {/* Notificaciones de Comentarios - Solo mostrar si está habilitado globalmente */}
-          {globalFeatures?.commentsNotificationEnabled ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <MessageSquare className="w-5 h-5 text-purple-500" />
-                  <div>
-                    <Label className="text-base font-semibold">Notificaciones de Comentarios</Label>
-                    <p className="text-sm text-gray-600">Recibir email con nuevos comentarios en fotos</p>
-                  </div>
-                </div>
-                <Switch
-                  checked={settings.newCommentsEnabled}
-                  onCheckedChange={(checked) => updateSetting('newCommentsEnabled', checked)}
-                  className="data-[state=checked]:bg-green-600"
-                />
-              </div>
-              
-              {settings.newCommentsEnabled && (
-                <div className="ml-7 space-y-3">
-                  <div className="flex items-center space-x-4">
-                    <div>
-                      <Label className="text-sm font-medium">Notificar cada:</Label>
-                      <Select 
-                        value={settings.newCommentsThreshold}
-                        onValueChange={(value) => updateSetting('newCommentsThreshold', value)}
-                      >
-                        <SelectTrigger className="w-40 mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="5">5 comentarios</SelectItem>
-                          <SelectItem value="10">10 comentarios</SelectItem>
-                          <SelectItem value="15">15 comentarios</SelectItem>
-                          <SelectItem value="20">20 comentarios</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleTestNotification('newComments')}
-                      disabled={testNotificationMutation.isPending}
-                    >
-                      <Mail className="w-4 h-4 mr-1" />
-                      Probar
-                    </Button>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 mt-2">
-                    <Switch
-                      checked={settings.includeCommentsInEmail}
-                      onCheckedChange={(checked) => updateSetting('includeCommentsInEmail', checked)}
-                      className="data-[state=checked]:bg-green-600"
-                    />
-                    <Label className="text-sm">Incluir comentarios completos en el email</Label>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between opacity-50">
-                <div className="flex items-center space-x-2">
-                  <EyeOff className="w-5 h-5 text-gray-400" />
-                  <div>
-                    <Label className="text-base font-semibold text-gray-400">Notificaciones de Comentarios</Label>
-                    <p className="text-sm text-gray-400">Esta función está deshabilitada por el superadministrador</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <Separator />
 
           {/* Recordatorios de Evento - Solo mostrar si está habilitado globalmente */}
           {globalFeatures?.eventRemindersEnabled ? (
