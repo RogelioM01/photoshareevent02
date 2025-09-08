@@ -405,271 +405,317 @@ export default function EventSettings() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Información del Evento */}
+              <div className="border border-blue-200 rounded-lg p-4 bg-blue-50/50">
+                <div className="mb-4">
+                  <Label className="text-base font-medium flex items-center mb-3">
+                    <User className="w-4 h-4 mr-2 text-blue-600" />
+                    Detalles del Evento
+                  </Label>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Define el nombre y descripción de tu evento para que los invitados sepan de qué se trata.
+                  </p>
+                </div>
+
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="title">Título del Evento</Label>
+                    <Label htmlFor="title" className="text-sm font-medium">Título del Evento</Label>
                     <Input
                       id="title"
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                       placeholder="Título del evento"
+                      className="mt-1"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="description">Descripción</Label>
+                    <Label htmlFor="description" className="text-sm font-medium">Descripción</Label>
                     <Textarea
                       id="description"
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       placeholder="Descripción del evento"
-                      rows={4}
+                      rows={3}
+                      className="mt-1"
                     />
-                  </div>
-
-                  {/* HYBRID DATE-TIME SELECTOR: Horizontal layout with smart time dropdown */}
-                  <div>
-                    <Label className="text-base font-medium mb-3 block flex items-center">
-                      <CalendarIcon className="w-4 h-4 mr-2 text-blue-600" />
-                      Fecha y Hora del Evento
-                    </Label>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-                      {/* Date Picker */}
-                      <div>
-                        <Label className="text-sm text-gray-600 mb-2 block">Fecha</Label>
-                        <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                "w-full justify-start text-left font-normal h-10",
-                                !formData.eventDate && "text-muted-foreground"
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {formData.eventDate ? (
-                                parseEventDate(formData.eventDate) ? 
-                                  format(parseEventDate(formData.eventDate)!, 'dd/MM/yyyy', { locale: es }) :
-                                  formData.eventDate
-                              ) : (
-                                "Seleccionar fecha"
-                              )}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <DayPicker
-                              mode="single"
-                              selected={formData.eventDate ? parseEventDate(formData.eventDate) : undefined}
-                              onSelect={handleDateSelect}
-                              locale={es}
-                              disabled={{ before: new Date() }}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-
-                      {/* Smart Time Selector */}
-                      <div>
-                        <Label className="text-sm text-gray-600 mb-2 block">Hora</Label>
-                        <select
-                          value={formData.eventTime}
-                          onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
-                          className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                        >
-                          <option value="">Seleccionar hora</option>
-                          
-                          {/* Mañana */}
-                          <optgroup label="🌅 Mañana">
-                            <option value="09:00">09:00 AM</option>
-                            <option value="10:00">10:00 AM</option>
-                            <option value="11:00">11:00 AM</option>
-                            <option value="12:00">12:00 PM</option>
-                          </optgroup>
-                          
-                          {/* Tarde */}
-                          <optgroup label="☀️ Tarde">
-                            <option value="13:00">01:00 PM</option>
-                            <option value="14:00">02:00 PM</option>
-                            <option value="15:00">03:00 PM</option>
-                            <option value="16:00">04:00 PM</option>
-                            <option value="17:00">05:00 PM</option>
-                            <option value="18:00">06:00 PM</option>
-                          </optgroup>
-                          
-                          {/* Noche */}
-                          <optgroup label="🌙 Noche">
-                            <option value="19:00">07:00 PM</option>
-                            <option value="20:00">08:00 PM</option>
-                            <option value="21:00">09:00 PM</option>
-                            <option value="22:00">10:00 PM</option>
-                            <option value="23:00">11:00 PM</option>
-                          </optgroup>
-                          
-                          {/* Personalizada */}
-                          <optgroup label="⚙️ Personalizada">
-                            <option value="custom">Hora personalizada...</option>
-                          </optgroup>
-                        </select>
-                        
-                        {/* Custom Time Input - shows when "custom" is selected */}
-                        {formData.eventTime === "custom" && (
-                          <div className="mt-2">
-                            <Label className="text-xs text-gray-500 mb-1 block">Hora exacta</Label>
-                            <div className="relative">
-                              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                              <Input
-                                type="time"
-                                onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
-                                className="pl-10 h-9"
-                                placeholder="HH:MM"
-                              />
-                            </div>
-                            <p className="text-xs text-gray-400 mt-1">Formato 24 horas (ej: 14:30)</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-2">Selecciona cuando se realizará el evento (opcional pero recomendado)</p>
-                  </div>
-
-                  {/* TIMEZONE SELECTOR: Hidden as requested by user */}
-                  <div className="hidden">
-                    <div className="flex items-center justify-between mb-2">
-                      <Label htmlFor="timezone">Zona Horaria</Label>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleTimezoneAutoDetect}
-                        className="text-xs text-blue-600 hover:text-blue-700"
-                      >
-                        <Globe className="w-3 h-3 mr-1" />
-                        Auto-detectar
-                      </Button>
-                    </div>
-                    <select
-                      id="timezone"
-                      value={formData.timezone}
-                      onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="America/Mexico_City">Ciudad de México (UTC-6)</option>
-                      <option value="America/New_York">Nueva York (UTC-5)</option>
-                      <option value="America/Los_Angeles">Los Ángeles (UTC-8)</option>
-                      <option value="America/Chicago">Chicago (UTC-6)</option>
-                      <option value="America/Denver">Denver (UTC-7)</option>
-                      <option value="America/Phoenix">Phoenix (UTC-7)</option>
-                      <option value="America/Vancouver">Vancouver (UTC-8)</option>
-                      <option value="America/Toronto">Toronto (UTC-5)</option>
-                      <option value="Europe/Madrid">Madrid (UTC+1)</option>
-                      <option value="Europe/London">Londres (UTC+0)</option>
-                      <option value="Europe/Paris">París (UTC+1)</option>
-                      <option value="Europe/Rome">Roma (UTC+1)</option>
-                      <option value="Europe/Berlin">Berlín (UTC+1)</option>
-                      <option value="Asia/Tokyo">Tokio (UTC+9)</option>
-                      <option value="Asia/Shanghai">Shanghai (UTC+8)</option>
-                      <option value="Asia/Dubai">Dubai (UTC+4)</option>
-                      <option value="Australia/Sydney">Sídney (UTC+11)</option>
-                    </select>
-                    <p className="text-xs text-gray-500 mt-1">Zona horaria del evento para coordinación global</p>
-                  </div>
-
-                  {/* LOCATION FIELDS: Lugar y Dirección - Nuevos campos implementados */}
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="eventPlace">Lugar</Label>
-                      <Input
-                        id="eventPlace"
-                        value={formData.eventPlace || ""}
-                        onChange={(e) => setFormData({ ...formData, eventPlace: e.target.value })}
-                        placeholder="Ej: Casa de María, Restaurante El Jardín, Parque Central"
-                        className="w-full"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">Nombre o tipo de lugar donde se realizará el evento</p>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="eventAddress">Dirección</Label>
-                      <Input
-                        id="eventAddress"
-                        value={formData.eventAddress || ""}
-                        onChange={(e) => setFormData({ ...formData, eventAddress: e.target.value })}
-                        placeholder="Dirección específica o detalles de ubicación"
-                        className="w-full"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">Dirección o detalles específicos del lugar (opcional)</p>
-                    </div>
                   </div>
                 </div>
 
-                <div className="hidden">
-                  <Label>Imagen de Perfil</Label>
-                  <div className="space-y-4">
-                    {formData.coverImageUrl && (
-                      <div className="w-full h-48 border-2 border-dashed border-gray-300 rounded-lg overflow-hidden">
-                        <img
-                          src={formData.coverImageUrl}
-                          alt="Vista previa"
-                          className="w-full h-full object-cover"
+                <div className="flex justify-end pt-3 border-t border-blue-200">
+                  <Button 
+                    onClick={handleSave} 
+                    disabled={isUpdating}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2"
+                    size="sm"
+                  >
+                    {isUpdating ? "Guardando..." : "Guardar Información"}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Fecha y Hora */}
+              <div className="border border-green-200 rounded-lg p-4 bg-green-50/50">
+                <div className="mb-4">
+                  <Label className="text-base font-medium flex items-center mb-3">
+                    <CalendarIcon className="w-4 h-4 mr-2 text-green-600" />
+                    Fecha y Hora del Evento
+                  </Label>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Especifica cuándo se realizará el evento (opcional pero recomendado).
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* Date Picker */}
+                  <div>
+                    <Label className="text-sm font-medium mb-2 block">Fecha</Label>
+                    <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal h-10",
+                            !formData.eventDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {formData.eventDate ? (
+                            parseEventDate(formData.eventDate) ? 
+                              format(parseEventDate(formData.eventDate)!, 'dd/MM/yyyy', { locale: es }) :
+                              formData.eventDate
+                          ) : (
+                            "Seleccionar fecha"
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <DayPicker
+                          mode="single"
+                          selected={formData.eventDate ? parseEventDate(formData.eventDate) : undefined}
+                          onSelect={handleDateSelect}
+                          locale={es}
+                          disabled={{ before: new Date() }}
+                          initialFocus
                         />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  {/* Smart Time Selector */}
+                  <div>
+                    <Label className="text-sm font-medium mb-2 block">Hora</Label>
+                    <select
+                      value={formData.eventTime}
+                      onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
+                      className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                    >
+                      <option value="">Seleccionar hora</option>
+                      
+                      {/* Mañana */}
+                      <optgroup label="🌅 Mañana">
+                        <option value="09:00">09:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                      </optgroup>
+                      
+                      {/* Tarde */}
+                      <optgroup label="☀️ Tarde">
+                        <option value="13:00">01:00 PM</option>
+                        <option value="14:00">02:00 PM</option>
+                        <option value="15:00">03:00 PM</option>
+                        <option value="16:00">04:00 PM</option>
+                        <option value="17:00">05:00 PM</option>
+                        <option value="18:00">06:00 PM</option>
+                      </optgroup>
+                      
+                      {/* Noche */}
+                      <optgroup label="🌙 Noche">
+                        <option value="19:00">07:00 PM</option>
+                        <option value="20:00">08:00 PM</option>
+                        <option value="21:00">09:00 PM</option>
+                        <option value="22:00">10:00 PM</option>
+                        <option value="23:00">11:00 PM</option>
+                      </optgroup>
+                      
+                      {/* Personalizada */}
+                      <optgroup label="⚙️ Personalizada">
+                        <option value="custom">Hora personalizada...</option>
+                      </optgroup>
+                    </select>
+                    
+                    {/* Custom Time Input - shows when "custom" is selected */}
+                    {formData.eventTime === "custom" && (
+                      <div className="mt-2">
+                        <Label className="text-xs text-gray-500 mb-1 block">Hora exacta</Label>
+                        <div className="relative">
+                          <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Input
+                            type="time"
+                            onChange={(e) => setFormData({ ...formData, eventTime: e.target.value })}
+                            className="pl-10 h-9"
+                            placeholder="HH:MM"
+                          />
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">Formato 24 horas (ej: 14:30)</p>
                       </div>
                     )}
-                    
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleCoverImageUpload(file);
-                      }}
-                      className="hidden"
-                    />
-                    
-                    <Button
-                      variant="outline"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={isUploadingCover}
-                      className="w-full"
-                    >
-                      {isUploadingCover ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Subiendo...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="h-4 w-4 mr-2" />
-                          Subir Imagen
-                        </>
-                      )}
-                    </Button>
-                    <p className="text-xs text-gray-500">JPG, PNG, GIF (máx. 5MB)</p>
                   </div>
+                </div>
+
+                <div className="flex justify-end pt-3 border-t border-green-200">
+                  <Button 
+                    onClick={handleSave} 
+                    disabled={isUpdating}
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2"
+                    size="sm"
+                  >
+                    {isUpdating ? "Guardando..." : "Guardar Fecha y Hora"}
+                  </Button>
                 </div>
               </div>
 
+              {/* Ubicación */}
+              <div className="border border-purple-200 rounded-lg p-4 bg-purple-50/50">
+                <div className="mb-4">
+                  <Label className="text-base font-medium flex items-center mb-3">
+                    <MapPin className="w-4 h-4 mr-2 text-purple-600" />
+                    Ubicación del Evento
+                  </Label>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Especifica dónde se realizará el evento para que tus invitados sepan cómo llegar.
+                  </p>
+                </div>
 
-              <Separator />
-              
-              <div className="flex justify-end">
-                <Button 
-                  onClick={handleSave} 
-                  disabled={isUpdating}
-                  className={rockyButtonStyles.primary}
-                >
-                  {isUpdating ? (
-                    <>
-                      <Loader2 className={rockyLoadingStyles.spinner} />
-                      <span className={rockyLoadingStyles.text}>Guardando...</span>
-                    </>
-                  ) : (
-                    <span className="text-white font-semibold">Guardar Cambios</span>
-                  )}
-                </Button>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="eventPlace" className="text-sm font-medium">Lugar</Label>
+                    <Input
+                      id="eventPlace"
+                      value={formData.eventPlace || ""}
+                      onChange={(e) => setFormData({ ...formData, eventPlace: e.target.value })}
+                      placeholder="Ej: Casa de María, Restaurante El Jardín, Parque Central"
+                      className="mt-1"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Nombre o tipo de lugar donde se realizará el evento</p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="eventAddress" className="text-sm font-medium">Dirección</Label>
+                    <Input
+                      id="eventAddress"
+                      value={formData.eventAddress || ""}
+                      onChange={(e) => setFormData({ ...formData, eventAddress: e.target.value })}
+                      placeholder="Dirección específica o detalles de ubicación"
+                      className="mt-1"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Dirección o detalles específicos del lugar (opcional)</p>
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-3 border-t border-purple-200">
+                  <Button 
+                    onClick={handleSave} 
+                    disabled={isUpdating}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2"
+                    size="sm"
+                  >
+                    {isUpdating ? "Guardando..." : "Guardar Ubicación"}
+                  </Button>
+                </div>
               </div>
+
+              {/* TIMEZONE SELECTOR: Hidden as requested by user */}
+              <div className="hidden">
+                <div className="flex items-center justify-between mb-2">
+                  <Label htmlFor="timezone">Zona Horaria</Label>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleTimezoneAutoDetect}
+                    className="text-xs text-blue-600 hover:text-blue-700"
+                  >
+                    <Globe className="w-3 h-3 mr-1" />
+                    Auto-detectar
+                  </Button>
+                </div>
+                <select
+                  id="timezone"
+                  value={formData.timezone}
+                  onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="America/Mexico_City">Ciudad de México (UTC-6)</option>
+                  <option value="America/New_York">Nueva York (UTC-5)</option>
+                  <option value="America/Los_Angeles">Los Ángeles (UTC-8)</option>
+                  <option value="America/Chicago">Chicago (UTC-6)</option>
+                  <option value="America/Denver">Denver (UTC-7)</option>
+                  <option value="America/Phoenix">Phoenix (UTC-7)</option>
+                  <option value="America/Vancouver">Vancouver (UTC-8)</option>
+                  <option value="America/Toronto">Toronto (UTC-5)</option>
+                  <option value="Europe/Madrid">Madrid (UTC+1)</option>
+                  <option value="Europe/London">Londres (UTC+0)</option>
+                  <option value="Europe/Paris">París (UTC+1)</option>
+                  <option value="Europe/Rome">Roma (UTC+1)</option>
+                  <option value="Europe/Berlin">Berlín (UTC+1)</option>
+                  <option value="Asia/Tokyo">Tokio (UTC+9)</option>
+                  <option value="Asia/Shanghai">Shanghai (UTC+8)</option>
+                  <option value="Asia/Dubai">Dubai (UTC+4)</option>
+                  <option value="Australia/Sydney">Sídney (UTC+11)</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">Zona horaria del evento para coordinación global</p>
+              </div>
+
+              {/* Hidden Profile Image Section */}
+              <div className="hidden">
+                <Label>Imagen de Perfil</Label>
+                <div className="space-y-4">
+                  {formData.coverImageUrl && (
+                    <div className="w-full h-48 border-2 border-dashed border-gray-300 rounded-lg overflow-hidden">
+                      <img
+                        src={formData.coverImageUrl}
+                        alt="Vista previa"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleCoverImageUpload(file);
+                    }}
+                    className="hidden"
+                  />
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploadingCover}
+                    className="w-full"
+                  >
+                    {isUploadingCover ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Subiendo...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Subir Imagen
+                      </>
+                    )}
+                  </Button>
+                  <p className="text-xs text-gray-500">JPG, PNG, GIF (máx. 5MB)</p>
+                </div>
+              </div>
+
             </CardContent>
           </Card>
         </TabsContent>
