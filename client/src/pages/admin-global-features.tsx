@@ -58,7 +58,10 @@ export default function AdminGlobalFeatures() {
       return response.json();
     },
     onSuccess: (data: any) => {
+      // Invalidate all related queries to force refresh across the app
       queryClient.invalidateQueries({ queryKey: ["/api/global-features"] });
+      // Also invalidate event notification queries to refresh admin panels
+      queryClient.invalidateQueries({ queryKey: ["/api/events"] });
       toast({
         title: "✅ Configuración actualizada",
         description: "Los cambios se han guardado exitosamente",
@@ -85,7 +88,7 @@ export default function AdminGlobalFeatures() {
     defaultReminderDaysBefore: "3"
   };
 
-  const handleSettingChange = (key: keyof GlobalFeatureSettings, value: boolean) => {
+  const handleSettingChange = (key: keyof GlobalFeatureSettings, value: boolean | number | string) => {
     setLocalSettings(prev => ({
       ...currentSettings,
       ...prev,
