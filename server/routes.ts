@@ -2251,6 +2251,43 @@ Generado desde la galería de eventos
   // BRANDED LINKS SYSTEM - URL Shortener APIs
   // =============================================================================
 
+  // Development helper to create global_feature_settings table
+  app.post('/api/dev/create-global-features-table', async (req, res) => {
+    try {
+      console.log('🔧 CREATING global_feature_settings table directly in Coolify PostgreSQL');
+      
+      const createTableSQL = `
+        CREATE TABLE IF NOT EXISTS global_feature_settings (
+          id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+          new_photos_notification_enabled boolean DEFAULT true NOT NULL,
+          attendee_confirmations_enabled boolean DEFAULT true NOT NULL,
+          comments_notification_enabled boolean DEFAULT true NOT NULL,
+          event_reminders_enabled boolean DEFAULT true NOT NULL,
+          default_new_photos_enabled boolean DEFAULT true NOT NULL,
+          default_attendee_confirmations_enabled boolean DEFAULT true NOT NULL,
+          default_comments_enabled boolean DEFAULT true NOT NULL,
+          default_event_reminders_enabled boolean DEFAULT true NOT NULL,
+          created_at timestamp DEFAULT now() NOT NULL,
+          updated_at timestamp DEFAULT now() NOT NULL
+        );
+      `;
+      
+      await storage.executeRawSQL(createTableSQL);
+      console.log('✅ global_feature_settings table created successfully');
+      
+      res.json({ 
+        success: true, 
+        message: 'global_feature_settings table created successfully'
+      });
+    } catch (error: any) {
+      console.error('❌ Error creating global_feature_settings table:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: `Error creating table: ${error.message}` 
+      });
+    }
+  });
+
   // Development helper to create branded_links table
   app.post('/api/dev/create-branded-links-table', async (req, res) => {
     try {
