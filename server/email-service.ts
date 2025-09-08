@@ -12,7 +12,6 @@ const USE_EMAILIT_API = process.env.EMAILIT_API_KEY?.startsWith('em_api_');
 export interface EmailService {
   sendEventRegistrationConfirmation(to: string, eventDetails: EventRegistrationData): Promise<void>;
   sendCheckInReminder(to: string, eventDetails: EventReminderData): Promise<void>;
-  sendNewPhotoNotification(to: string, photoDetails: PhotoNotificationData): Promise<void>;
   sendNewAttendeeNotification(to: string, attendeeData: NewAttendeeNotificationData): Promise<void>;
   sendMultipleAttendeesNotification(to: string, data: MultipleAttendeesNotificationData): Promise<void>;
 }
@@ -41,13 +40,6 @@ export interface EventReminderData {
   organizerName: string;
 }
 
-export interface PhotoNotificationData {
-  guestName: string;
-  eventTitle: string;
-  photoCount: number;
-  eventUrl: string;
-  organizerName: string;
-}
 
 export interface NewAttendeeNotificationData {
   eventTitle: string;
@@ -199,48 +191,6 @@ const createReminderEmailHTML = (data: EventReminderData): string => {
   `;
 };
 
-const createPhotoNotificationHTML = (data: PhotoNotificationData): string => {
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Nuevas Fotos Disponibles</title>
-    </head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-      <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-        <h1 style="color: white; margin: 0; font-size: 28px;">📸 ¡Nuevas Fotos!</h1>
-      </div>
-      
-      <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; border-radius: 0 0 10px 10px;">
-        <p style="font-size: 18px; margin-bottom: 20px;">Hola <strong>${data.guestName}</strong>,</p>
-        
-        <p>¡Hay nuevas fotos disponibles en <strong>${data.eventTitle}</strong>!</p>
-        
-        <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
-          <h3 style="margin-top: 0; color: #1976d2;">📊 Resumen</h3>
-          <p style="font-size: 24px; margin: 10px 0; color: #1976d2;">
-            <strong>${data.photoCount}</strong> ${data.photoCount === 1 ? 'nueva foto' : 'nuevas fotos'}
-          </p>
-          <p style="color: #666; margin: 0;">¡Ve y descarga tus favoritas!</p>
-        </div>
-        
-        <div style="text-align: center; margin: 30px 0;">
-          <a href="${data.eventUrl}" style="background: #4facfe; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Ver Galería</a>
-        </div>
-        
-        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
-        
-        <p style="font-size: 14px; color: #666; text-align: center;">
-          Gracias por ser parte de nuestro evento<br>
-          - ${data.organizerName}
-        </p>
-      </div>
-    </body>
-    </html>
-  `;
-};
 
 const createNewAttendeeNotificationHTML = (data: NewAttendeeNotificationData): string => {
   const companionsText = data.companionsCount && parseInt(data.companionsCount) > 0 
@@ -466,65 +416,6 @@ export class EmailitSMTPServiceAdapter implements EmailService {
     }
   }
 
-  async sendNewPhotoNotification(to: string, data: PhotoNotificationData): Promise<void> {
-    try {
-      console.log('📧 EMAILIT SMTP: Sending photo notification');
-      
-      const html = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Nuevas Fotos Disponibles</title>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .photo-info { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f5576c; }
-            .btn { display: inline-block; padding: 12px 24px; background: #f5576c; color: white; text-decoration: none; border-radius: 6px; margin: 10px 0; }
-            .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <h1>📸 ¡Nuevas fotos disponibles!</h1>
-            <p>Se han agregado nuevos recuerdos a tu evento</p>
-          </div>
-          
-          <div class="content">
-            <div class="photo-info">
-              <h3>🎉 ${data.eventTitle}</h3>
-              <p>Se han subido <strong>${data.photoCount}</strong> ${data.photoCount === 1 ? 'nueva foto' : 'nuevas fotos'} al álbum del evento.</p>
-            </div>
-            
-            <p>
-              <a href="${data.eventUrl}" class="btn">Ver fotos del evento</a>
-            </p>
-            
-            <p>¡No te pierdas estos nuevos recuerdos!</p>
-          </div>
-          
-          <div class="footer">
-            <p>Organizado por ${data.organizerName}</p>
-            <p><small>Rocky Events Platform - rocky.mx</small></p>
-          </div>
-        </body>
-        </html>
-      `;
-
-      await emailitSMTPService.sendEmail({
-        to,
-        subject: `📸 Nuevas fotos en ${data.eventTitle}`,
-        html
-      });
-
-      console.log('✅ EMAILIT SMTP: Photo notification sent successfully');
-    } catch (error) {
-      console.error('❌ EMAILIT SMTP: Failed to send photo notification:', error);
-      throw new Error(`Failed to send photo notification: ${error}`);
-    }
-  }
 
   async sendNewAttendeeNotification(to: string, data: NewAttendeeNotificationData): Promise<void> {
     try {
@@ -752,24 +643,6 @@ export class EmailitServiceAdapter implements EmailService {
     }
   }
 
-  async sendNewPhotoNotification(to: string, data: PhotoNotificationData): Promise<void> {
-    try {
-      console.log('📧 EMAILIT: Sending photo notification');
-      
-      await emailitService.sendNewPhotoNotification(to, {
-        eventTitle: data.eventTitle,
-        uploaderName: data.guestName,
-        photoCount: data.photoCount,
-        eventUrl: data.eventUrl,
-        organizerName: data.organizerName
-      });
-
-      console.log('✅ EMAILIT: Photo notification sent successfully');
-    } catch (error) {
-      console.error('❌ EMAILIT: Failed to send photo notification:', error);
-      throw new Error(`Failed to send photo notification: ${error}`);
-    }
-  }
 
   async sendNewAttendeeNotification(to: string, data: NewAttendeeNotificationData): Promise<void> {
     try {
@@ -877,35 +750,6 @@ export class EmailitHybridService implements EmailService {
     throw new Error('All email services (REST API and SMTP) failed for check-in reminder');
   }
 
-  async sendNewPhotoNotification(to: string, data: PhotoNotificationData): Promise<void> {
-    try {
-      if (USE_EMAILIT_API) {
-        console.log('📧 HYBRID: Attempting REST API (primary)');
-        const apiService = new EmailitServiceAdapter();
-        await apiService.sendNewPhotoNotification(to, data);
-        console.log('✅ HYBRID: REST API success');
-        return;
-      }
-    } catch (error) {
-      console.log('⚠️ HYBRID: REST API failed, trying SMTP fallback');
-    }
-
-    try {
-      if (USE_EMAILIT_SMTP) {
-        console.log('📧 HYBRID: Attempting SMTP (secondary)');
-        const smtpService = new EmailitSMTPServiceAdapter();
-        await smtpService.sendNewPhotoNotification(to, data);
-        console.log('✅ HYBRID: SMTP success');
-        return;
-      }
-    } catch (error) {
-      console.log('⚠️ HYBRID: SMTP failed, no more fallbacks available');
-    }
-
-    // FINAL: All Emailit services failed
-    console.log('❌ HYBRID: Both Emailit services failed, no photo notification sent');
-    throw new Error('All email services (REST API and SMTP) failed for photo notification');
-  }
 
   async sendNewAttendeeNotification(to: string, data: NewAttendeeNotificationData): Promise<void> {
     try {
