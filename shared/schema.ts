@@ -153,11 +153,12 @@ export const globalFeatureSettings = pgTable("global_feature_settings", {
   eventRemindersEnabled: boolean("event_reminders_enabled").default(true).notNull(),
   
   // Valores por defecto para nuevos eventos
-  defaultNewPhotosThreshold: integer("default_new_photos_threshold").default(30).notNull(),
-  defaultAttendeeThreshold: integer("default_attendee_threshold").default(5).notNull(),
-  defaultCommentsThreshold: integer("default_comments_threshold").default(15).notNull(),
-  defaultReminderDays: text("default_reminder_days").default("1,2").notNull(),
+  defaultNewPhotosEnabled: boolean("default_new_photos_enabled").default(true).notNull(),
+  defaultAttendeeConfirmationsEnabled: boolean("default_attendee_confirmations_enabled").default(true).notNull(),
+  defaultCommentsEnabled: boolean("default_comments_enabled").default(true).notNull(),
+  defaultEventRemindersEnabled: boolean("default_event_reminders_enabled").default(true).notNull(),
   
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
