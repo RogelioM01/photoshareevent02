@@ -56,7 +56,6 @@ export const textPosts = pgTable("text_posts", {
   eventId: uuid("event_id").references(() => events.id, { onDelete: "cascade" }).notNull(), // CASCADE: Si se elimina el evento, se eliminan sus publicaciones de texto
   userId: text("user_id"), // NULLABLE: No foreign key - allows guest users without restrictions
   content: text("content").notNull(),
-  backgroundGradient: text("background_gradient").default("from-blue-50 via-purple-50 to-pink-50"), // Degradado de fondo predeterminado
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

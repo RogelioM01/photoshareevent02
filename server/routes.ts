@@ -443,7 +443,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/events/:eventId/posts", async (req, res) => {
     try {
       const { eventId } = req.params;
-      const { userId, content, userName, backgroundGradient } = req.body;
+      const { userId, content, userName } = req.body;
       
       // Simple validation
       if (!userId || !content || !eventId || !userName) {
@@ -453,8 +453,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const post = await storage.createTextPost({
         eventId,
         userId,
-        content,
-        backgroundGradient: backgroundGradient || "from-blue-50 via-purple-50 to-pink-50" // Default gradient if none provided
+        content
       });
       
       // Store user name in event_users table for future reference if not exists
