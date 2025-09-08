@@ -38,10 +38,10 @@ export default function AdminGlobalFeatures() {
 
   // Update local settings when data changes
   useEffect(() => {
-    if (settings && !localSettings) {
+    if (settings) {
       setLocalSettings(settings);
     }
-  }, [settings, localSettings]);
+  }, [settings]);
 
   // Save settings mutation
   const saveSettingsMutation = useMutation({
@@ -89,6 +89,7 @@ export default function AdminGlobalFeatures() {
   };
 
   const handleSettingChange = (key: keyof GlobalFeatureSettings, value: boolean | number | string) => {
+    console.log(`🔧 SUPERADMIN: Changing ${key} to:`, value);
     setLocalSettings(prev => ({
       ...currentSettings,
       ...prev,
@@ -97,12 +98,21 @@ export default function AdminGlobalFeatures() {
   };
 
   const handleSave = () => {
+    console.log('🔧 SUPERADMIN: Saving settings:', localSettings);
     if (localSettings) {
       saveSettingsMutation.mutate(localSettings);
     }
   };
 
-  const hasUnsavedChanges = localSettings && settings && JSON.stringify(localSettings) !== JSON.stringify(settings);
+  // Check for unsaved changes using a more reliable comparison
+  const hasUnsavedChanges = localSettings && settings && (
+    localSettings.attendeeConfirmationsEnabled !== settings.attendeeConfirmationsEnabled ||
+    localSettings.eventRemindersEnabled !== settings.eventRemindersEnabled ||
+    localSettings.defaultAttendeeConfirmationsEnabled !== settings.defaultAttendeeConfirmationsEnabled ||
+    localSettings.defaultEventRemindersEnabled !== settings.defaultEventRemindersEnabled ||
+    localSettings.defaultAttendeeConfirmationsThreshold !== settings.defaultAttendeeConfirmationsThreshold ||
+    localSettings.defaultReminderDaysBefore !== settings.defaultReminderDaysBefore
+  );
 
   if (isLoading) {
     return (
