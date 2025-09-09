@@ -1,0 +1,22 @@
+# Nixpacks configuration for Express.js monolith
+# This overrides the automatic SPA detection
+
+[variables]
+NODE_ENV = "production"
+PORT = "5000"
+
+[phases.setup]
+nixPkgs = ["nodejs_18", "npm"]
+aptPkgs = ["curl", "wget"]
+
+[phases.install]
+dependsOn = ["setup"]
+cmds = ["npm install"]
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["npm run build"]
+
+[start]
+# Start the Express.js server instead of Caddy static server
+cmd = "npm start"

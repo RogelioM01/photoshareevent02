@@ -29,6 +29,10 @@ Build Pack: Nixpacks (Auto-detectado)
 Base Directory: /
 ```
 
+⚠️ **ARCHIVO CRÍTICO:** Asegúrate de que exista `nixpacks.toml` en la raíz del proyecto
+- Sin este archivo, Nixpacks detectará la app como SPA estática (❌)
+- Con este archivo, ejecutará el servidor Express correctamente (✅)
+
 **¿Por qué `/` en Base Directory?**
 - Tu aplicación está en la raíz del repositorio
 - No es un monorepo con subcarpetas
