@@ -1,26 +1,8 @@
-# FORCE Nixpacks to treat this as Node.js server, NOT SPA
-# Override all automatic SPA detection
-providers = ["node"]
-
-[variables]
-NODE_ENV = "production"
-PORT = "5000"
-# CRITICAL: Disable SPA detection and Caddy server
-NIXPACKS_SPA_CADDY = "false"
-NIXPACKS_NODE_VERSION = "18"
-
-[phases.setup]
-nixPkgs = ["nodejs_18", "npm-9_x", "tsx"]
-aptPkgs = ["curl", "wget"]
-
-[phases.install]
-dependsOn = ["setup"]
-cmds = ["npm ci --omit=dev"]
-
-[phases.build]
-dependsOn = ["install"]
-cmds = ["npm run build"]
-
-# CRITICAL: Force server start command, disable static file serving
 [start]
 cmd = "npm start"
+
+[build]
+cmd = "npm run build"
+
+[install]
+cmd = "npm ci --omit=dev"
