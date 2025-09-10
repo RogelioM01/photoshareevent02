@@ -37,30 +37,21 @@ function ExpandableAttendeeRow({ attendee, index, eventId }: ExpandableAttendeeR
   const displayName = attendee.guestName || attendee.userName || attendee.userId || 'Usuario';
   const firstLetter = displayName.charAt(0).toUpperCase();
   
-  // Determine if attendee can be modified based on check-in origin
-  // QR check-ins: attendee has qrCode and status 'present' (came via QR scanner)
-  // Manual check-ins: attendee status 'present' but no qrCode or was set manually
-  const hasQRCode = Boolean(attendee.qrCode);
-  const isQRCheckIn = attendee.status === 'present' && hasQRCode;
-  const isManualCheckIn = attendee.status === 'present' && !hasQRCode;
-  
+  // Simplified check-in logic (QR scanning removed)
   // Rules:
-  // - "confirmed": always toggleable → "present" 
-  // - "present" (manual admin): toggleable → "confirmed"
-  // - "present" (QR/scanner): PROTECTED, not toggleable
-  const canToggleManually = attendee.status === 'confirmed' || isManualCheckIn;
+  // - "confirmed": can change to "present" 
+  // - "present": can change back to "confirmed"
+  const canToggleManually = attendee.status === 'confirmed' || attendee.status === 'present';
   
   // Handle manual check-in toggle
   const handleBadgeClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent row expansion
     
     if (!canToggleManually) {
-      // TODO: Future iteration - implement bidirectional toggle for manual check-ins
-      // For now, silently prevent modification of present attendees
       return;
     }
     
-    // Bidirectional toggle: confirmed ↔ present (only for manual check-ins)
+    // Bidirectional toggle: confirmed ↔ present
     const newStatus = attendee.status === 'confirmed' ? 'present' : 'confirmed';
     
     manualCheckInMutation.mutate(

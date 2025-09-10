@@ -1520,22 +1520,10 @@ Generado desde la galería de eventos
         return res.status(400).json({ message: "Attendee does not belong to this event" });
       }
       
-      // Determine attendee modification permissions based on check-in origin
-      // QR check-ins: attendee has qrCode and status 'present' (came via QR scanner)
-      // Manual check-ins: attendee status 'present' but no qrCode or was set manually
-      const hasQRCode = Boolean(attendee.qrCode);
-      const isQRCheckIn = attendee.status === 'present' && hasQRCode;
-      const isManualCheckIn = attendee.status === 'present' && !hasQRCode;
-      
+      // Simplified check-in logic (QR scanning removed)
       // Rules:
       // - "confirmed": can change to "present" (checkin action)
-      // - "present" (manual): can change back to "confirmed" (undo_checkin action)  
-      // - "present" (QR/scanner): PROTECTED, cannot be modified
-      if (isQRCheckIn) {
-        return res.status(400).json({ 
-          message: "Este asistente llegó por QR y no puede modificarse" 
-        });
-      }
+      // - "present": can change back to "confirmed" (undo_checkin action)
       
       // Validate action based on current status
       if (attendee.status === 'confirmed' && action !== 'checkin') {
@@ -1544,16 +1532,15 @@ Generado desde la galería de eventos
         });
       }
       
-      if (isManualCheckIn && action !== 'undo_checkin') {
+      if (attendee.status === 'present' && action !== 'undo_checkin') {
         return res.status(400).json({ 
-          message: "Solo se permite deshacer check-in para asistentes presentes por admin" 
+          message: "Solo se permite deshacer check-in para asistentes presentes" 
         });
       }
       
       const newStatus = action === 'checkin' ? 'present' : 'confirmed';
       
-      // Update attendee status - use null to avoid FK constraint issues
-      // We'll distinguish manual vs QR by storing a marker in a different way
+      // Update attendee status 
       const checkedInBy = newStatus === 'present' ? null : undefined;
       const updatedAttendee = await storage.updateAttendeeStatus(
         attendeeId, 
