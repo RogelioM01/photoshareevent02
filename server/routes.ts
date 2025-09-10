@@ -1495,47 +1495,6 @@ Generado desde la galería de eventos
     }
   });
 
-  // Check-in attendee via QR code
-  app.post("/api/events/:eventId/checkin", async (req, res) => {
-    try {
-      const { eventId } = req.params;
-      const { qrCode, checkedInBy } = req.body;
-      
-      if (!qrCode) {
-        return res.status(400).json({ message: "QR code is required" });
-      }
-      
-      // Find attendee by QR code
-      const attendee = await storage.getAttendeeByQR(qrCode);
-      if (!attendee) {
-        return res.status(404).json({ message: "Invalid QR code" });
-      }
-      
-      // Verify QR belongs to this event
-      if (attendee.eventId !== eventId) {
-        return res.status(400).json({ message: "QR code does not belong to this event" });
-      }
-      
-      // Check if already checked in
-      if (attendee.status === 'present') {
-        return res.status(400).json({ message: "Already checked in", attendee });
-      }
-      
-      // Update status to present (using null for scanner check-ins)
-      const finalCheckedInBy = checkedInBy === 'scanner' ? null : checkedInBy;
-      const updatedAttendee = await storage.updateAttendeeStatus(
-        attendee.id, 
-        'present', 
-        finalCheckedInBy
-      );
-      
-      console.log(`✅ CHECK-IN SUCCESS: Attendee ${attendee.userId} checked in to event ${eventId}`);
-      res.json(updatedAttendee);
-    } catch (error) {
-      console.error("Error checking in attendee:", error);
-      res.status(500).json({ message: "Failed to check in attendee" });
-    }
-  });
 
   // Manual check-in toggle for admins (alternates between confirmed and present)
   app.post("/api/events/:eventId/manual-checkin", async (req, res) => {

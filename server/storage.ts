@@ -132,7 +132,6 @@ export interface IStorage {
   confirmAttendance(eventId: string, userId: string): Promise<EventAttendee>;
   confirmGuestAttendance(eventId: string, guestData: any): Promise<EventAttendee>;
   updateAttendeeStatus(attendeeId: string, status: string, checkedInBy?: string): Promise<EventAttendee>;
-  getAttendeeByQR(qrCode: string): Promise<EventAttendee | undefined>;
   getAttendeeById(attendeeId: string): Promise<EventAttendee | undefined>;
   migrateAttendeesTableForGuests(): Promise<any>;
   getAttendeeStats(eventId: string): Promise<AttendeeStats>;
@@ -1179,15 +1178,6 @@ export class DatabaseStorage implements IStorage {
     });
   }
 
-  async getAttendeeByQR(qrCode: string): Promise<EventAttendee | undefined> {
-    return await executeDbOperation(async (db) => {
-      const result = await db.select()
-        .from(eventAttendees)
-        .where(eq(eventAttendees.qrCode, qrCode))
-        .limit(1);
-      return result[0];
-    });
-  }
 
   async getAttendeeById(attendeeId: string): Promise<EventAttendee | undefined> {
     return await executeDbOperation(async (db) => {

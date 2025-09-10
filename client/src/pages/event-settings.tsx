@@ -38,7 +38,6 @@ import {
 import BackgroundSelector from "@/components/background-selector";
 import { usePersonalEvent, type PersonalEventFormData } from "@/hooks/usePersonalEvent";
 import { AttendeeStats } from "@/components/attendee-stats";
-import { QRScanner } from "@/components/qr-scanner";
 import QRModal from "@/components/qr-modal";
 import EventNotificationsSettings from "@/components/event-notifications-settings";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -67,7 +66,6 @@ export default function EventSettings() {
   });
   const [activeTab, setActiveTab] = useState("basico");
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [showQRScanner, setShowQRScanner] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -1051,29 +1049,6 @@ export default function EventSettings() {
 
       </Tabs>
 
-      {/* QR Scanner Modal */}
-      {showQRScanner && personalEvent?.id && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Scanner QR - Check-in</h3>
-              <Button
-                variant="outline"
-                onClick={() => setShowQRScanner(false)}
-                className="ml-4"
-              >
-                Cerrar
-              </Button>
-            </div>
-            <div className="p-4">
-              <QRScanner 
-                eventId={personalEvent.id}
-                onScanSuccess={() => {}}
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* QR Modal controlado desde el header */}
       {isQRModalOpen && (
