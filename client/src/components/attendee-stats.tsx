@@ -252,7 +252,7 @@ export function AttendeeStats({ eventId, eventTitle, onShowCheckIn }: AttendeeSt
           {onShowCheckIn && (
             <Button 
               onClick={onShowCheckIn}
-              className="w-full mt-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+              className="w-full mt-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white"
             >
               <QrCode className="h-4 w-4 mr-2" />
               Lista de asistencia
