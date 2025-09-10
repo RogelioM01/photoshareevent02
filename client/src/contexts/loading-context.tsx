@@ -30,7 +30,6 @@ export type LoadingOperation =
   | 'event-update'
   | 'cover-upload'
   | 'rsvp-confirm'
-  | 'checkin-process'
   | 'user-create'
   | 'user-update'
   | 'user-delete'

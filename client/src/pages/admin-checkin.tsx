@@ -3,18 +3,15 @@ import { useParams, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, UserCheck, Clock, Scan } from "lucide-react";
-import { QRScanner } from "@/components/qr-scanner";
+import { ArrowLeft, Users, UserCheck, Clock } from "lucide-react";
 import { AttendeeStats } from "@/components/attendee-stats";
 import { usePersonalEvent } from "@/hooks/usePersonalEvent";
 import { useQuery } from "@tanstack/react-query";
 
-// PHASE 3: Admin Check-in Page with QR Scanner
+// Admin Check-in Page - Attendance List Management
 export default function AdminCheckinPage() {
   const { username } = useParams();
   const [, setLocation] = useLocation();
-  const [scanHistory, setScanHistory] = useState<any[]>([]);
-
   // Get personal event data
   const { personalEvent, isLoading } = usePersonalEvent(username);
 
@@ -26,17 +23,6 @@ export default function AdminCheckinPage() {
 
   // Type guard for attendees
   const attendeeList = Array.isArray(attendees) ? attendees : [];
-
-  // Handle successful scan
-  const handleScanSuccess = (attendeeData: any) => {
-    setScanHistory(prev => [
-      {
-        ...attendeeData,
-        scannedAt: new Date().toISOString()
-      },
-      ...prev.slice(0, 9) // Keep last 10 scans
-    ]);
-  };
 
   // Loading state
   if (isLoading) {
@@ -83,78 +69,23 @@ export default function AdminCheckinPage() {
               </Button>
               <div className="min-w-0 flex-1">
                 <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">
-                  Check-in: {personalEvent.title}
+                  Lista de Asistencia: {personalEvent.title}
                 </h1>
               </div>
             </div>
             <Badge variant="secondary" className="flex items-center gap-1 text-xs sm:text-sm px-2 py-1">
-              <Scan className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden sm:inline">Modo Scanner</span>
-              <span className="sm:hidden">Scanner</span>
+              <Users className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Lista de Asistencia</span>
+              <span className="sm:hidden">Lista</span>
             </Badge>
           </div>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-3 py-4 sm:px-4 sm:py-6">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-          {/* Left Column: QR Scanner */}
-          <div className="space-y-6">
-            <QRScanner 
-              eventId={personalEvent.id}
-              onScanSuccess={handleScanSuccess}
-            />
-
-            {/* Recent Scans */}
-            {scanHistory.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
-                    Últimos Check-ins
-                  </CardTitle>
-                  <CardDescription>
-                    Historial de los últimos {scanHistory.length} check-ins realizados
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {scanHistory.map((scan, index) => (
-                      <div 
-                        key={`${scan.id}-${scan.scannedAt}`}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-                            <UserCheck className="h-4 w-4 text-white" />
-                          </div>
-                          <div>
-                            <p className="font-medium">
-                              {scan.guestName || scan.userId || 'Usuario'}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {new Date(scan.scannedAt).toLocaleTimeString('es-ES')}
-                            </p>
-                          </div>
-                        </div>
-                        <Badge variant="default" className="bg-green-600">
-                          Presente
-                        </Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-
-          {/* Right Column: Statistics and Attendee List */}
-          <div className="space-y-6">
-            {/* Event Statistics */}
-            <AttendeeStats eventId={personalEvent.id} eventTitle={personalEvent.title} />
-
-
-          </div>
+        <div className="space-y-6">
+          {/* Event Statistics */}
+          <AttendeeStats eventId={personalEvent.id} eventTitle={personalEvent.title} />
         </div>
       </div>
     </div>
