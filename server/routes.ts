@@ -1706,7 +1706,7 @@ Generado desde la galería de eventos
       console.log('🔧 MIGRATION: Adding date columns to events table');
       
       // Create direct postgres connection to execute schema changes  
-      const connectionString = process.env.DATABASE_URL!;
+      let connectionString = process.env.DATABASE_URL!;
       
       // Fix URL encoding for special characters
       if (connectionString.includes('#')) {
