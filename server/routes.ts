@@ -1408,8 +1408,8 @@ Generado desde la galería de eventos
             // Get current total of confirmed attendees
             const totalConfirmed = await storage.getAttendeeStats(eventId);
             const currentCount = totalConfirmed.confirmed || 0;
-            const lastCount = parseInt(notificationSettings.lastAttendeeCount || "0");
-            const threshold = parseInt(notificationSettings.attendeeConfirmationsThreshold || "5");
+            const lastCount = parseInt(String(notificationSettings.lastAttendeeCount || "0"));
+            const threshold = parseInt(String(notificationSettings.attendeeConfirmationsThreshold || "5"));
             
             console.log(`📊 THRESHOLD CHECK: current=${currentCount}, last=${lastCount}, threshold=${threshold}`);
             
