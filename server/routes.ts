@@ -1428,7 +1428,7 @@ Generado desde la galería de eventos
               await db
                 .update(eventNotificationSettings)
                 .set({ 
-                  lastAttendeeCount: currentCount.toString(),
+                  lastAttendeeCount: currentCount,
                   updatedAt: sql`NOW()`
                 })
                 .where(eq(eventNotificationSettings.eventId, eventId));
