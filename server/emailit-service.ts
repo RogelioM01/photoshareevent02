@@ -51,11 +51,11 @@ interface EmailitError {
  * - Queue support for bulk sending
  */
 class EmailitService {
-  private apiKey: string;
-  private apiUrl: string;
-  private fromEmail: string;
-  private fromName: string;
-  private enabled: boolean;
+  private apiKey!: string;
+  private apiUrl!: string;
+  private fromEmail!: string;
+  private fromName!: string;
+  private enabled!: boolean;
 
   constructor() {
     this.initialize();
