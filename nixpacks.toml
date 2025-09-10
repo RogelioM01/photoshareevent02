@@ -1,8 +1,0 @@
-[start]
-cmd = "npm start"
-
-[build]
-cmd = "npm run build"
-
-[install]
-cmd = "npm ci --omit=dev"
