@@ -219,7 +219,7 @@ export function AttendeeStats({ eventId, eventTitle, onShowCheckIn }: AttendeeSt
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Resumen de Asistencia
+            Lista de asistencia
           </CardTitle>
           <CardDescription>
             Estado actual de confirmaciones para "{eventTitle}"
@@ -255,7 +255,7 @@ export function AttendeeStats({ eventId, eventTitle, onShowCheckIn }: AttendeeSt
               className="w-full mt-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
             >
               <QrCode className="h-4 w-4 mr-2" />
-              Abrir Scanner QR para Check-in
+              Lista de asistencia
             </Button>
           )}
         </CardContent>
