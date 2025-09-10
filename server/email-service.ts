@@ -14,6 +14,7 @@ export interface EmailService {
   sendCheckInReminder(to: string, eventDetails: EventReminderData): Promise<void>;
   sendNewAttendeeNotification(to: string, attendeeData: NewAttendeeNotificationData): Promise<void>;
   sendMultipleAttendeesNotification(to: string, data: MultipleAttendeesNotificationData): Promise<void>;
+  sendNewPhotoNotification(to: string, photoData: NewPhotoNotificationData): Promise<void>;
 }
 
 // Data interfaces for email templates
@@ -65,6 +66,14 @@ export interface MultipleAttendeesNotificationData {
     companionsCount: string;
     confirmedAt: string;
   }>;
+}
+
+export interface NewPhotoNotificationData {
+  guestName: string;
+  eventTitle: string;
+  photoCount: number;
+  eventUrl: string;
+  organizerName: string;
 }
 
 // Email templates
@@ -809,6 +818,36 @@ export class EmailitHybridService implements EmailService {
     // FINAL: All Emailit services failed
     console.log('❌ HYBRID: Both Emailit services failed, no multiple attendees notification sent');
     throw new Error('All email services (REST API and SMTP) failed for multiple attendees notification');
+  }
+
+  async sendNewPhotoNotification(to: string, data: NewPhotoNotificationData): Promise<void> {
+    try {
+      if (USE_EMAILIT_API) {
+        console.log('📧 HYBRID: Attempting REST API (primary)');
+        const apiService = new EmailitServiceAdapter();
+        await apiService.sendNewPhotoNotification(to, data);
+        console.log('✅ HYBRID: REST API success');
+        return;
+      }
+    } catch (error) {
+      console.log('⚠️ HYBRID: REST API failed, trying SMTP fallback');
+    }
+
+    try {
+      if (USE_EMAILIT_SMTP) {
+        console.log('📧 HYBRID: Attempting SMTP (secondary)');
+        const smtpService = new EmailitSMTPServiceAdapter();
+        await smtpService.sendNewPhotoNotification(to, data);
+        console.log('✅ HYBRID: SMTP success');
+        return;
+      }
+    } catch (error) {
+      console.log('⚠️ HYBRID: SMTP failed, no more fallbacks available');
+    }
+
+    // FINAL: All Emailit services failed
+    console.log('❌ HYBRID: Both Emailit services failed, no photo notification sent');
+    throw new Error('All email services (REST API and SMTP) failed for photo notification');
   }
 }
 
