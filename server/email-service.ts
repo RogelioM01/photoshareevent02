@@ -603,6 +603,40 @@ export class EmailitSMTPServiceAdapter implements EmailService {
       throw new Error(`Failed to send multiple attendees notification: ${error}`);
     }
   }
+
+  async sendNewPhotoNotification(to: string, data: NewPhotoNotificationData): Promise<void> {
+    try {
+      console.log('📧 EMAILIT SMTP: Sending new photo notification');
+      
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Nuevas fotos disponibles</title>
+        </head>
+        <body>
+          <h1>📸 Nuevas fotos en ${data.eventTitle}</h1>
+          <p>Hola,</p>
+          <p>Se han subido ${data.photoCount} nuevas fotos al evento.</p>
+          <p><strong>Subido al evento</strong></p>
+          <p><a href="${data.eventUrl}">Ver galería completa</a></p>
+        </body>
+        </html>
+      `;
+
+      await emailitSMTPService.sendEmail({
+        to,
+        subject: `📸 Nuevas fotos - ${data.eventTitle}`,
+        html
+      });
+
+      console.log('✅ EMAILIT SMTP: New photo notification sent successfully');
+    } catch (error) {
+      console.error('❌ EMAILIT SMTP: Failed to send photo notification:', error);
+      throw new Error(`Failed to send photo notification: ${error}`);
+    }
+  }
 }
 
 // Emailit REST API Service Implementation
@@ -689,6 +723,25 @@ export class EmailitServiceAdapter implements EmailService {
       console.error('❌ EMAILIT: Failed to send multiple attendees notification:', error);
       // Don't throw error - log it but continue registration process
       console.log('🔄 EMAIL FAILED BUT REGISTRATION CONTINUES');
+    }
+  }
+
+  async sendNewPhotoNotification(to: string, data: NewPhotoNotificationData): Promise<void> {
+    try {
+      console.log('📧 EMAILIT: Sending new photo notification');
+      
+      await emailitService.sendNewPhotoNotification(to, {
+        eventTitle: data.eventTitle,
+        eventUrl: data.eventUrl,
+        photoCount: data.photoCount,
+        photoCount: data.photoCount
+      });
+
+      console.log('✅ EMAILIT: New photo notification sent successfully');
+    } catch (error) {
+      console.error('❌ EMAILIT: Failed to send photo notification:', error);
+      // Don't throw error - log it but continue
+      console.log('🔄 EMAIL FAILED BUT PROCESS CONTINUES');
     }
   }
 }
